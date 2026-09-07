@@ -11,4 +11,5 @@ export PATH="$(go env GOPATH)/bin:$PATH"
 cd "${ROOT}/examples/notes"
 export GOWORK=off
 bffx sync
+go mod tidy
 go test ./...

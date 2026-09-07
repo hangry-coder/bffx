@@ -1,6 +1,6 @@
 module github.com/hangry-coder/bffx
 
-go 1.26.4
+go 1.26
 
 require (
 	github.com/Masterminds/semver/v3 v3.5.0
@@ -30,7 +30,7 @@ require (
 	golang.org/x/crypto v0.56.0
 	golang.org/x/sync v0.22.0
 	google.golang.org/genai v1.57.0
-	google.golang.org/grpc v1.81.1
+	google.golang.org/grpc v1.82.1
 	google.golang.org/protobuf v1.36.11
 	gopkg.in/yaml.v3 v3.0.1
 	modernc.org/sqlite v1.58.0

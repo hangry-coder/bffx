@@ -168,6 +168,22 @@ func GenerateOrchestratorMain(projectDir string, dryRun bool) error {
 		runServerCall = "if err := app.RunServer(context.Background(), \".\", port, ActionHandlers, HookHandlers); err != nil {"
 	}
 
+	outPath := filepath.Join(projectDir, "cmd", cmdDirName, "main.go")
+	if existing, err := os.ReadFile(outPath); err == nil {
+		if strings.Contains(string(existing), "ActionHandlers") && strings.Contains(string(existing), "HookHandlers") {
+			return nil
+		}
+		if regErr == nil && strings.Contains(string(existing), "app.RunServer") {
+			updated := strings.Replace(string(existing), "app.RunServer(context.Background(), \".\", port, nil, nil)", "app.RunServer(context.Background(), \".\", port, ActionHandlers, HookHandlers)", 1)
+			if updated != string(existing) {
+				if dryRun {
+					return nil
+				}
+				return os.WriteFile(outPath, []byte(updated), 0o644)
+			}
+		}
+	}
+
 	orchestratorMain := strings.Join([]string{
 		"package main",
 		"",
@@ -189,7 +205,6 @@ func GenerateOrchestratorMain(projectDir string, dryRun bool) error {
 		"	}",
 		"}",
 	}, "\n")
-	outPath := filepath.Join(projectDir, "cmd", cmdDirName, "main.go")
 	if dryRun {
 		logger.Info("[dry-run] would write %s (%d bytes)", outPath, len(orchestratorMain))
 		return nil

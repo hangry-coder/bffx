@@ -215,7 +215,7 @@ export interface BFFXError {
 
   async get<T = any>(screenName: string, queryParams?: Record<string, string>): Promise<T> {
     const query = new URLSearchParams(queryParams).toString();
-    const qs = query ? ` + fmt.Sprintf("`?${query}`") + ` : '';
+    const qs = query ? ` + "`?${query}`" + ` : '';
     return this.client.request<T>(` + fmt.Sprintf("`%s/screens/${encodeURIComponent(screenName)}${qs}`", apiPrefix) + `, { method: 'GET' });
   }
 
@@ -307,7 +307,7 @@ export interface BFFXError {
 
 	// 7. BFFXClient Class
 	sb.WriteString("export class BFFXClient {\n")
-	sb.WriteString(fmt.Sprintf("  readonly baseUrl: string;\n"))
+	sb.WriteString("  readonly baseUrl: string;\n")
 	sb.WriteString("  private token?: string;\n")
 	sb.WriteString("  private deviceId?: string;\n\n")
 	sb.WriteString("  readonly auth: AuthService;\n")

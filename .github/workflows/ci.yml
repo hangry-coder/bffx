@@ -18,7 +18,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v6
         with:
-          go-version: '1.26.4'
+          go-version: '1.26.6'
           check-latest: true
       - name: Install dependencies
         run: go mod download
@@ -46,7 +46,7 @@ jobs:
       - uses: actions/checkout@v5
       - uses: actions/setup-go@v6
         with:
-          go-version: '1.26.4'
+          go-version: '1.26.6'
           check-latest: true
       - run: go mod download
       - name: go build -tags=sentry
@@ -62,7 +62,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v6
         with:
-          go-version: '1.26.4'
+          go-version: '1.26.6'
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v9
         with:
@@ -76,7 +76,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v6
         with:
-          go-version: '1.26.4'
+          go-version: '1.26.6'
           check-latest: true
       - name: Run govulncheck
         run: go run golang.org/x/vuln/cmd/govulncheck@v1.3.0 ./...
@@ -89,7 +89,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v6
         with:
-          go-version: '1.26.4'
+          go-version: '1.26.6'
       - name: Run Tests with Race Detector
         # Target concurrent packages to save compute resources
         run: go test -race -count=1 -timeout=10m ./pkg/storage/... ./pkg/auth/... ./pkg/api/router/... ./pkg/api/sse/... ./pkg/worker/...
@@ -101,7 +101,7 @@ jobs:
       - uses: actions/checkout@v5
       - uses: actions/setup-go@v6
         with:
-          go-version: '1.26.4'
+          go-version: '1.26.6'
           check-latest: true
       - run: go mod download
       - run: ./scripts/ci/example-notes.sh
@@ -113,7 +113,7 @@ jobs:
       - uses: actions/checkout@v5
       - uses: actions/setup-go@v6
         with:
-          go-version: '1.26.4'
+          go-version: '1.26.6'
           check-latest: true
       - run: go mod download
       - run: chmod +x ./scripts/ci/example-pipelines-calorie.sh
@@ -126,7 +126,7 @@ jobs:
       - uses: actions/checkout@v5
       - uses: actions/setup-go@v6
         with:
-          go-version: '1.26.4'
+          go-version: '1.26.6'
           check-latest: true
       - run: go mod download
       - run: bash ./scripts/ci/architecture-baseline.sh
@@ -138,7 +138,7 @@ jobs:
       - uses: actions/checkout@v5
       - uses: actions/setup-go@v6
         with:
-          go-version: '1.26.4'
+          go-version: '1.26.6'
           check-latest: true
       - run: go mod download
       - run: bash ./scripts/ci/example-notes.sh
@@ -151,7 +151,7 @@ jobs:
       - uses: actions/checkout@v5
       - uses: actions/setup-go@v6
         with:
-          go-version: '1.26.4'
+          go-version: '1.26.6'
           check-latest: true
       - run: go mod download
       - run: bash ./scripts/ci/packaging-matrix.sh
@@ -164,7 +164,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v6
         with:
-          go-version: '1.26.4'
+          go-version: '1.26.6'
           check-latest: true
       - run: go mod download
       - name: Start Postgres (and sidecars)
@@ -197,7 +197,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v6
         with:
-          go-version: '1.26.4'
+          go-version: '1.26.6'
       - name: Run Acceptance Tests
         run: go test -v ./tests/acceptance/...
       - name: Run E2E Tests
