@@ -1,6 +1,6 @@
 module github.com/hangry-coder/bffx
 
-go 1.26
+go 1.26.0
 
 require (
 	github.com/Masterminds/semver/v3 v3.5.0
