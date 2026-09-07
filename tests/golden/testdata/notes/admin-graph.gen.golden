@@ -1,0 +1,1437 @@
+{
+  "site": {
+    "title": "Notes App Admin",
+    "theme": "dark",
+    "default_per_page": 15,
+    "menu": [
+      {
+        "label": "Dashboard",
+        "page": "dashboard"
+      },
+      {
+        "label": "Users",
+        "page": "users",
+        "priority": 8
+      },
+      {
+        "label": "Resources",
+        "priority": 80,
+        "children": [
+          {
+            "label": "Devices",
+            "page": "resource:Device",
+            "priority": 100
+          },
+          {
+            "label": "Other Resources",
+            "page": "resources",
+            "priority": 999
+          }
+        ]
+      },
+      {
+        "label": "Settings",
+        "priority": 90,
+        "children": [
+          {
+            "label": "App Settings",
+            "page": "app-settings",
+            "priority": 10
+          },
+          {
+            "label": "Docs",
+            "priority": 20,
+            "children": [
+              {
+                "label": "API Reference",
+                "page": "api-docs"
+              },
+              {
+                "label": "BFFX Guide",
+                "page": "bffx-docs",
+                "priority": 10
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "session": {},
+    "session_resolved": {
+      "max_age_seconds": 0,
+      "idle_timeout_seconds": 0,
+      "dev_unlimited": true
+    },
+    "features": {
+      "api_docs": true
+    },
+    "export": {
+      "csv_enabled": true
+    }
+  },
+  "dashboard": {
+    "widgets": [
+      {
+        "type": "metric",
+        "title": "Total Notes",
+        "query": {
+          "aggregate": "count",
+          "resource": "Note"
+        }
+      }
+    ]
+  },
+  "pages": null,
+  "resources": [
+    {
+      "resource": "AdminUser",
+      "enabled": false,
+      "fields": [
+        {
+          "name": "email",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "password",
+          "type": "string"
+        },
+        {
+          "name": "role",
+          "type": "string"
+        }
+      ],
+      "menu": {
+        "label": "AdminUsers",
+        "parent": "system",
+        "priority": 100
+      },
+      "index": {
+        "per_page": 25,
+        "selectable": true,
+        "columns": [
+          "email",
+          "role"
+        ],
+        "scopes": [
+          {
+            "name": "all",
+            "default": true
+          }
+        ],
+        "filters": [
+          {
+            "field": "email",
+            "as": "string",
+            "label": "Email"
+          },
+          {
+            "field": "role",
+            "as": "string",
+            "label": "Role"
+          }
+        ]
+      },
+      "show": {
+        "attributes": [
+          "email",
+          "role"
+        ],
+        "exclude": [
+          "password"
+        ]
+      },
+      "form": {
+        "exclude": [
+          "password"
+        ],
+        "inputs": [
+          {
+            "field": "email",
+            "as": "email"
+          },
+          {
+            "field": "role",
+            "as": "string"
+          }
+        ]
+      },
+      "policy": {}
+    },
+    {
+      "resource": "AppConfig",
+      "enabled": true,
+      "fields": [
+        {
+          "name": "config_key",
+          "type": "string"
+        },
+        {
+          "name": "config_value",
+          "type": "string"
+        },
+        {
+          "name": "description",
+          "type": "string"
+        }
+      ],
+      "menu": {
+        "label": "AppConfigs",
+        "parent": "system",
+        "priority": 100
+      },
+      "index": {
+        "per_page": 25,
+        "selectable": true,
+        "columns": [
+          "config_key",
+          "config_value",
+          "description"
+        ],
+        "scopes": [
+          {
+            "name": "all",
+            "default": true
+          }
+        ],
+        "filters": [
+          {
+            "field": "config_key",
+            "as": "string",
+            "label": "Config_key"
+          },
+          {
+            "field": "config_value",
+            "as": "string",
+            "label": "Config_value"
+          },
+          {
+            "field": "description",
+            "as": "string",
+            "label": "Description"
+          }
+        ]
+      },
+      "show": {
+        "attributes": [
+          "config_key",
+          "config_value",
+          "description"
+        ]
+      },
+      "form": {
+        "inputs": [
+          {
+            "field": "config_key",
+            "as": "string"
+          },
+          {
+            "field": "config_value",
+            "as": "string"
+          },
+          {
+            "field": "description",
+            "as": "string"
+          }
+        ]
+      },
+      "policy": {}
+    },
+    {
+      "resource": "Device",
+      "enabled": true,
+      "fields": [
+        {
+          "name": "user_id",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "fingerprint",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "push_token",
+          "type": "string"
+        },
+        {
+          "name": "platform",
+          "type": "string"
+        },
+        {
+          "name": "model",
+          "type": "string"
+        },
+        {
+          "name": "os_version",
+          "type": "string"
+        },
+        {
+          "name": "app_version",
+          "type": "string"
+        },
+        {
+          "name": "is_trusted",
+          "type": "bool"
+        },
+        {
+          "name": "last_seen_at",
+          "type": "string"
+        }
+      ],
+      "menu": {
+        "label": "Devices",
+        "parent": "system",
+        "priority": 100,
+        "pin": true
+      },
+      "index": {
+        "per_page": 25,
+        "selectable": true,
+        "columns": [
+          "user_id",
+          "fingerprint",
+          "platform",
+          "model",
+          "os_version",
+          "app_version"
+        ],
+        "scopes": [
+          {
+            "name": "all",
+            "default": true
+          }
+        ],
+        "filters": [
+          {
+            "field": "user_id",
+            "as": "string",
+            "label": "User_id"
+          },
+          {
+            "field": "fingerprint",
+            "as": "string",
+            "label": "Fingerprint"
+          },
+          {
+            "field": "platform",
+            "as": "string",
+            "label": "Platform"
+          }
+        ]
+      },
+      "show": {
+        "attributes": [
+          "user_id",
+          "fingerprint",
+          "platform",
+          "model",
+          "os_version",
+          "app_version",
+          "is_trusted",
+          "last_seen_at"
+        ],
+        "exclude": [
+          "push_token"
+        ]
+      },
+      "form": {
+        "exclude": [
+          "push_token"
+        ],
+        "inputs": [
+          {
+            "field": "user_id",
+            "as": "string"
+          },
+          {
+            "field": "fingerprint",
+            "as": "string"
+          },
+          {
+            "field": "platform",
+            "as": "string"
+          },
+          {
+            "field": "model",
+            "as": "string"
+          },
+          {
+            "field": "os_version",
+            "as": "string"
+          },
+          {
+            "field": "app_version",
+            "as": "string"
+          },
+          {
+            "field": "is_trusted",
+            "as": "bool"
+          },
+          {
+            "field": "last_seen_at",
+            "as": "string"
+          }
+        ]
+      },
+      "policy": {}
+    },
+    {
+      "resource": "Entitlement",
+      "enabled": true,
+      "fields": [
+        {
+          "name": "user_id",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "slug",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "expires_at",
+          "type": "string"
+        }
+      ],
+      "menu": {
+        "label": "Entitlements",
+        "parent": "system",
+        "priority": 100
+      },
+      "index": {
+        "per_page": 25,
+        "selectable": true,
+        "columns": [
+          "user_id",
+          "slug",
+          "expires_at"
+        ],
+        "scopes": [
+          {
+            "name": "all",
+            "default": true
+          }
+        ],
+        "filters": [
+          {
+            "field": "user_id",
+            "as": "string",
+            "label": "User_id"
+          },
+          {
+            "field": "slug",
+            "as": "string",
+            "label": "Slug"
+          },
+          {
+            "field": "expires_at",
+            "as": "string",
+            "label": "Expires_at"
+          }
+        ]
+      },
+      "show": {
+        "attributes": [
+          "user_id",
+          "slug",
+          "expires_at"
+        ]
+      },
+      "form": {
+        "inputs": [
+          {
+            "field": "user_id",
+            "as": "string"
+          },
+          {
+            "field": "slug",
+            "as": "string"
+          },
+          {
+            "field": "expires_at",
+            "as": "string"
+          }
+        ]
+      },
+      "policy": {}
+    },
+    {
+      "resource": "Incident",
+      "enabled": false,
+      "fields": [
+        {
+          "name": "title",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "severity",
+          "type": "string"
+        },
+        {
+          "name": "stack_trace",
+          "type": "string"
+        },
+        {
+          "name": "resolved",
+          "type": "bool"
+        },
+        {
+          "name": "resolved_by",
+          "type": "string"
+        }
+      ],
+      "menu": {
+        "label": "Incidents",
+        "parent": "system",
+        "priority": 100
+      },
+      "index": {
+        "per_page": 25,
+        "selectable": true,
+        "columns": [
+          "title",
+          "severity",
+          "stack_trace",
+          "resolved",
+          "resolved_by"
+        ],
+        "scopes": [
+          {
+            "name": "all",
+            "default": true
+          }
+        ],
+        "filters": [
+          {
+            "field": "title",
+            "as": "string",
+            "label": "Title"
+          },
+          {
+            "field": "severity",
+            "as": "string",
+            "label": "Severity"
+          },
+          {
+            "field": "stack_trace",
+            "as": "string",
+            "label": "Stack_trace"
+          }
+        ]
+      },
+      "show": {
+        "attributes": [
+          "title",
+          "severity",
+          "stack_trace",
+          "resolved",
+          "resolved_by"
+        ]
+      },
+      "form": {
+        "inputs": [
+          {
+            "field": "title",
+            "as": "string"
+          },
+          {
+            "field": "severity",
+            "as": "string"
+          },
+          {
+            "field": "stack_trace",
+            "as": "string"
+          },
+          {
+            "field": "resolved",
+            "as": "bool"
+          },
+          {
+            "field": "resolved_by",
+            "as": "string"
+          }
+        ]
+      },
+      "policy": {}
+    },
+    {
+      "resource": "MetricSample",
+      "enabled": true,
+      "fields": [
+        {
+          "name": "timestamp",
+          "type": "string"
+        },
+        {
+          "name": "goroutines",
+          "type": "int"
+        },
+        {
+          "name": "mem_alloc",
+          "type": "int"
+        },
+        {
+          "name": "mem_sys",
+          "type": "int"
+        },
+        {
+          "name": "cpu_percent",
+          "type": "float"
+        },
+        {
+          "name": "http_total",
+          "type": "int"
+        },
+        {
+          "name": "http_errors",
+          "type": "int"
+        },
+        {
+          "name": "http_p95_ms",
+          "type": "int"
+        }
+      ],
+      "menu": {
+        "label": "MetricSamples",
+        "parent": "system",
+        "priority": 100
+      },
+      "index": {
+        "per_page": 25,
+        "selectable": true,
+        "columns": [
+          "timestamp",
+          "goroutines",
+          "mem_alloc",
+          "mem_sys",
+          "cpu_percent",
+          "http_total"
+        ],
+        "scopes": [
+          {
+            "name": "all",
+            "default": true
+          }
+        ],
+        "filters": [
+          {
+            "field": "timestamp",
+            "as": "string",
+            "label": "Timestamp"
+          }
+        ]
+      },
+      "show": {
+        "attributes": [
+          "timestamp",
+          "goroutines",
+          "mem_alloc",
+          "mem_sys",
+          "cpu_percent",
+          "http_total",
+          "http_errors",
+          "http_p95_ms"
+        ]
+      },
+      "form": {
+        "inputs": [
+          {
+            "field": "timestamp",
+            "as": "string"
+          },
+          {
+            "field": "goroutines",
+            "as": "string"
+          },
+          {
+            "field": "mem_alloc",
+            "as": "string"
+          },
+          {
+            "field": "mem_sys",
+            "as": "string"
+          },
+          {
+            "field": "cpu_percent",
+            "as": "string"
+          },
+          {
+            "field": "http_total",
+            "as": "string"
+          },
+          {
+            "field": "http_errors",
+            "as": "string"
+          },
+          {
+            "field": "http_p95_ms",
+            "as": "string"
+          }
+        ]
+      },
+      "policy": {}
+    },
+    {
+      "resource": "Note",
+      "enabled": true,
+      "fields": [
+        {
+          "name": "title",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "body",
+          "type": "string"
+        },
+        {
+          "name": "attachment_key",
+          "type": "string",
+          "bucket": "uploads"
+        }
+      ],
+      "menu": {
+        "label": "My Notes",
+        "parent": "app",
+        "priority": 5
+      },
+      "index": {
+        "per_page": 10,
+        "default_sort": "created_at desc",
+        "columns": [
+          "title",
+          "created_at"
+        ],
+        "scopes": [
+          {
+            "name": "all",
+            "default": true
+          }
+        ],
+        "filters": [
+          {
+            "field": "title",
+            "as": "string",
+            "label": "Title"
+          },
+          {
+            "field": "body",
+            "as": "string",
+            "label": "Body"
+          },
+          {
+            "field": "attachment_key",
+            "as": "string",
+            "label": "Attachment_key"
+          }
+        ]
+      },
+      "show": {
+        "attributes": [
+          "title",
+          "body",
+          "attachment_key"
+        ]
+      },
+      "form": {
+        "inputs": [
+          {
+            "field": "title",
+            "as": "string"
+          },
+          {
+            "field": "body",
+            "as": "string"
+          },
+          {
+            "field": "attachment_key",
+            "as": "string"
+          }
+        ]
+      },
+      "policy": {}
+    },
+    {
+      "resource": "Permission",
+      "enabled": true,
+      "fields": [
+        {
+          "name": "name",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "slug",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "menu": {
+        "label": "Permissions",
+        "parent": "system",
+        "priority": 100
+      },
+      "index": {
+        "per_page": 25,
+        "selectable": true,
+        "columns": [
+          "name",
+          "slug"
+        ],
+        "scopes": [
+          {
+            "name": "all",
+            "default": true
+          }
+        ],
+        "filters": [
+          {
+            "field": "name",
+            "as": "string",
+            "label": "Name"
+          },
+          {
+            "field": "slug",
+            "as": "string",
+            "label": "Slug"
+          }
+        ]
+      },
+      "show": {
+        "attributes": [
+          "name",
+          "slug"
+        ]
+      },
+      "form": {
+        "inputs": [
+          {
+            "field": "name",
+            "as": "string"
+          },
+          {
+            "field": "slug",
+            "as": "string"
+          }
+        ]
+      },
+      "policy": {}
+    },
+    {
+      "resource": "RefreshToken",
+      "enabled": true,
+      "fields": [
+        {
+          "name": "user_id",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "device_id",
+          "type": "string"
+        },
+        {
+          "name": "token",
+          "type": "string"
+        },
+        {
+          "name": "expires_at",
+          "type": "string"
+        },
+        {
+          "name": "used",
+          "type": "bool"
+        },
+        {
+          "name": "family_id",
+          "type": "string"
+        },
+        {
+          "name": "created_at",
+          "type": "string"
+        },
+        {
+          "name": "updated_at",
+          "type": "string"
+        }
+      ],
+      "menu": {
+        "label": "RefreshTokens",
+        "parent": "app",
+        "priority": 100
+      },
+      "index": {
+        "per_page": 25,
+        "selectable": true,
+        "columns": [
+          "user_id",
+          "device_id",
+          "expires_at",
+          "used",
+          "family_id",
+          "created_at"
+        ],
+        "scopes": [
+          {
+            "name": "all",
+            "default": true
+          }
+        ],
+        "filters": [
+          {
+            "field": "user_id",
+            "as": "string",
+            "label": "User_id"
+          },
+          {
+            "field": "device_id",
+            "as": "string",
+            "label": "Device_id"
+          },
+          {
+            "field": "expires_at",
+            "as": "string",
+            "label": "Expires_at"
+          }
+        ]
+      },
+      "show": {
+        "attributes": [
+          "user_id",
+          "device_id",
+          "expires_at",
+          "used",
+          "family_id",
+          "created_at",
+          "updated_at"
+        ],
+        "exclude": [
+          "token"
+        ]
+      },
+      "form": {
+        "exclude": [
+          "token"
+        ],
+        "inputs": [
+          {
+            "field": "user_id",
+            "as": "string"
+          },
+          {
+            "field": "device_id",
+            "as": "string"
+          },
+          {
+            "field": "expires_at",
+            "as": "string"
+          },
+          {
+            "field": "used",
+            "as": "bool"
+          },
+          {
+            "field": "family_id",
+            "as": "string"
+          },
+          {
+            "field": "created_at",
+            "as": "string"
+          },
+          {
+            "field": "updated_at",
+            "as": "string"
+          }
+        ]
+      },
+      "policy": {}
+    },
+    {
+      "resource": "Role",
+      "enabled": true,
+      "fields": [
+        {
+          "name": "name",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "slug",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "menu": {
+        "label": "Roles",
+        "parent": "system",
+        "priority": 100
+      },
+      "index": {
+        "per_page": 25,
+        "selectable": true,
+        "columns": [
+          "name",
+          "slug"
+        ],
+        "scopes": [
+          {
+            "name": "all",
+            "default": true
+          }
+        ],
+        "filters": [
+          {
+            "field": "name",
+            "as": "string",
+            "label": "Name"
+          },
+          {
+            "field": "slug",
+            "as": "string",
+            "label": "Slug"
+          }
+        ]
+      },
+      "show": {
+        "attributes": [
+          "name",
+          "slug"
+        ]
+      },
+      "form": {
+        "inputs": [
+          {
+            "field": "name",
+            "as": "string"
+          },
+          {
+            "field": "slug",
+            "as": "string"
+          }
+        ]
+      },
+      "policy": {}
+    },
+    {
+      "resource": "Subscription",
+      "enabled": true,
+      "fields": [
+        {
+          "name": "user_id",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "plan_id",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "status",
+          "type": "string"
+        },
+        {
+          "name": "expires_at",
+          "type": "string"
+        }
+      ],
+      "menu": {
+        "label": "Subscriptions",
+        "parent": "system",
+        "priority": 100
+      },
+      "index": {
+        "per_page": 25,
+        "selectable": true,
+        "columns": [
+          "user_id",
+          "plan_id",
+          "status",
+          "expires_at"
+        ],
+        "scopes": [
+          {
+            "name": "all",
+            "default": true
+          }
+        ],
+        "filters": [
+          {
+            "field": "user_id",
+            "as": "string",
+            "label": "User_id"
+          },
+          {
+            "field": "plan_id",
+            "as": "string",
+            "label": "Plan_id"
+          },
+          {
+            "field": "status",
+            "as": "string",
+            "label": "Status"
+          }
+        ]
+      },
+      "show": {
+        "attributes": [
+          "user_id",
+          "plan_id",
+          "status",
+          "expires_at"
+        ]
+      },
+      "form": {
+        "inputs": [
+          {
+            "field": "user_id",
+            "as": "string"
+          },
+          {
+            "field": "plan_id",
+            "as": "string"
+          },
+          {
+            "field": "status",
+            "as": "string"
+          },
+          {
+            "field": "expires_at",
+            "as": "string"
+          }
+        ]
+      },
+      "policy": {}
+    },
+    {
+      "resource": "TelemetryEvent",
+      "enabled": true,
+      "fields": [
+        {
+          "name": "user_id",
+          "type": "string"
+        },
+        {
+          "name": "event_type",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "screen_name",
+          "type": "string"
+        },
+        {
+          "name": "action_name",
+          "type": "string"
+        },
+        {
+          "name": "properties",
+          "type": "string"
+        }
+      ],
+      "menu": {
+        "label": "TelemetryEvents",
+        "parent": "system",
+        "priority": 100
+      },
+      "index": {
+        "per_page": 25,
+        "selectable": true,
+        "columns": [
+          "user_id",
+          "event_type",
+          "screen_name",
+          "action_name",
+          "properties"
+        ],
+        "scopes": [
+          {
+            "name": "all",
+            "default": true
+          }
+        ],
+        "filters": [
+          {
+            "field": "user_id",
+            "as": "string",
+            "label": "User_id"
+          },
+          {
+            "field": "event_type",
+            "as": "string",
+            "label": "Event_type"
+          },
+          {
+            "field": "screen_name",
+            "as": "string",
+            "label": "Screen_name"
+          }
+        ]
+      },
+      "show": {
+        "attributes": [
+          "user_id",
+          "event_type",
+          "screen_name",
+          "action_name",
+          "properties"
+        ]
+      },
+      "form": {
+        "inputs": [
+          {
+            "field": "user_id",
+            "as": "string"
+          },
+          {
+            "field": "event_type",
+            "as": "string"
+          },
+          {
+            "field": "screen_name",
+            "as": "string"
+          },
+          {
+            "field": "action_name",
+            "as": "string"
+          },
+          {
+            "field": "properties",
+            "as": "string"
+          }
+        ]
+      },
+      "policy": {}
+    },
+    {
+      "resource": "User",
+      "enabled": true,
+      "fields": [
+        {
+          "name": "email",
+          "type": "string"
+        },
+        {
+          "name": "password",
+          "type": "string"
+        },
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "role",
+          "type": "string"
+        },
+        {
+          "name": "status",
+          "type": "string"
+        },
+        {
+          "name": "device_id",
+          "type": "string"
+        },
+        {
+          "name": "phone",
+          "type": "string"
+        },
+        {
+          "name": "whatsapp",
+          "type": "string"
+        },
+        {
+          "name": "is_verified",
+          "type": "bool"
+        },
+        {
+          "name": "otp_code",
+          "type": "string"
+        }
+      ],
+      "menu": {
+        "label": "Users",
+        "parent": "app",
+        "priority": 100,
+        "pin": true
+      },
+      "index": {
+        "per_page": 25,
+        "selectable": true,
+        "columns": [
+          "email",
+          "name",
+          "role",
+          "status",
+          "device_id",
+          "phone"
+        ],
+        "scopes": [
+          {
+            "name": "all",
+            "default": true
+          }
+        ],
+        "filters": [
+          {
+            "field": "email",
+            "as": "string",
+            "label": "Email"
+          },
+          {
+            "field": "name",
+            "as": "string",
+            "label": "Name"
+          },
+          {
+            "field": "role",
+            "as": "string",
+            "label": "Role"
+          }
+        ]
+      },
+      "show": {
+        "attributes": [
+          "email",
+          "name",
+          "role",
+          "status",
+          "device_id",
+          "phone",
+          "whatsapp",
+          "is_verified"
+        ],
+        "exclude": [
+          "password",
+          "otp_code"
+        ]
+      },
+      "form": {
+        "exclude": [
+          "password",
+          "otp_code"
+        ],
+        "inputs": [
+          {
+            "field": "email",
+            "as": "email"
+          },
+          {
+            "field": "name",
+            "as": "string"
+          },
+          {
+            "field": "role",
+            "as": "string"
+          },
+          {
+            "field": "status",
+            "as": "string"
+          },
+          {
+            "field": "device_id",
+            "as": "string"
+          },
+          {
+            "field": "phone",
+            "as": "string"
+          },
+          {
+            "field": "whatsapp",
+            "as": "string"
+          },
+          {
+            "field": "is_verified",
+            "as": "bool"
+          }
+        ]
+      },
+      "policy": {}
+    },
+    {
+      "resource": "UserRole",
+      "enabled": true,
+      "fields": [
+        {
+          "name": "user_id",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "role_id",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "menu": {
+        "label": "UserRoles",
+        "parent": "system",
+        "priority": 100
+      },
+      "index": {
+        "per_page": 25,
+        "selectable": true,
+        "columns": [
+          "user_id",
+          "role_id"
+        ],
+        "scopes": [
+          {
+            "name": "all",
+            "default": true
+          }
+        ],
+        "filters": [
+          {
+            "field": "user_id",
+            "as": "string",
+            "label": "User_id"
+          },
+          {
+            "field": "role_id",
+            "as": "string",
+            "label": "Role_id"
+          }
+        ]
+      },
+      "show": {
+        "attributes": [
+          "user_id",
+          "role_id"
+        ]
+      },
+      "form": {
+        "inputs": [
+          {
+            "field": "user_id",
+            "as": "string"
+          },
+          {
+            "field": "role_id",
+            "as": "string"
+          }
+        ]
+      },
+      "policy": {}
+    }
+  ],
+  "reserved_resources": [
+    "feature_flag",
+    "feature_flags",
+    "featureflag",
+    "featureflags",
+    "audit_log",
+    "audit_logs",
+    "auditlog",
+    "auditlogs",
+    "incident",
+    "incidents",
+    "admin_user",
+    "admin_users",
+    "adminuser",
+    "adminusers"
+  ]
+}

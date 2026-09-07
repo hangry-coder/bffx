@@ -1,0 +1,204 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    - cron: '0 0 * * 0' # Weekly run on Sundays at midnight UTC
+  workflow_dispatch: # Manual trigger
+
+jobs:
+  test-smoke:
+    name: Smoke Tests (Fast)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Set up Go
+        uses: actions/setup-go@v6
+        with:
+          go-version: '1.26.4'
+          check-latest: true
+      - name: Install dependencies
+        run: go mod download
+      - name: Run Build
+        run: go build -v ./cmd/bffx
+      - name: Verify admin UI dist (embedded SPA)
+        run: |
+          set -euo pipefail
+          bash scripts/build-admin-ui.sh
+          if ! git diff --exit-code pkg/admin/ui-v2/dist/; then
+            echo "::error::pkg/admin/ui-v2/dist/ is out of sync with ui-v2/src/. Run scripts/build-admin-ui.sh and commit the changes."
+            exit 1
+          fi
+      - name: Run Unit Tests with Coverage
+        run: go test -v -short -count=1 -p=1 -coverprofile=coverage.out ./...
+      - name: Coverage Gate
+        run: go run tools/coverage_gate.go coverage.out
+      - name: Build experimental storage drivers
+        run: go build -tags=experimental_mongo,experimental_pocketbase ./pkg/storage/...
+
+  build-sentry-tag:
+    name: Sentry tag build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-go@v6
+        with:
+          go-version: '1.26.4'
+          check-latest: true
+      - run: go mod download
+      - name: go build -tags=sentry
+        run: go build -tags=sentry ./...
+      - name: go test observability (-tags=sentry)
+        run: go test -tags=sentry -count=1 ./pkg/observability/...
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Set up Go
+        uses: actions/setup-go@v6
+        with:
+          go-version: '1.26.4'
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v9
+        with:
+          version: v2.12
+
+  govulncheck:
+    name: Vulnerability Scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Set up Go
+        uses: actions/setup-go@v6
+        with:
+          go-version: '1.26.4'
+          check-latest: true
+      - name: Run govulncheck
+        run: go run golang.org/x/vuln/cmd/govulncheck@v1.3.0 ./...
+
+  test-race:
+    name: Race Detection (Required)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Set up Go
+        uses: actions/setup-go@v6
+        with:
+          go-version: '1.26.4'
+      - name: Run Tests with Race Detector
+        # Target concurrent packages to save compute resources
+        run: go test -race -count=1 -timeout=10m ./pkg/storage/... ./pkg/auth/... ./pkg/api/router/... ./pkg/api/sse/... ./pkg/worker/...
+
+  example-notes:
+    name: Example notes (sync + build)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-go@v6
+        with:
+          go-version: '1.26.4'
+          check-latest: true
+      - run: go mod download
+      - run: ./scripts/ci/example-notes.sh
+
+  example-pipelines-calorie:
+    name: Example pipelines-calorie (sync + build)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-go@v6
+        with:
+          go-version: '1.26.4'
+          check-latest: true
+      - run: go mod download
+      - run: chmod +x ./scripts/ci/example-pipelines-calorie.sh
+      - run: ./scripts/ci/example-pipelines-calorie.sh
+
+  architecture-baseline:
+    name: Architecture baseline
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-go@v6
+        with:
+          go-version: '1.26.4'
+          check-latest: true
+      - run: go mod download
+      - run: bash ./scripts/ci/architecture-baseline.sh
+
+  example-modules:
+    name: Example modules (notes + pipelines-calorie)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-go@v6
+        with:
+          go-version: '1.26.4'
+          check-latest: true
+      - run: go mod download
+      - run: bash ./scripts/ci/example-notes.sh
+      - run: bash ./scripts/ci/example-pipelines-calorie.sh
+
+  packaging-matrix:
+    name: Packaging matrix (full vs minimal)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-go@v6
+        with:
+          go-version: '1.26.4'
+          check-latest: true
+      - run: go mod download
+      - run: bash ./scripts/ci/packaging-matrix.sh
+
+  integration-tests:
+    name: Integration (Postgres Sidecar & Docker Stack)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Set up Go
+        uses: actions/setup-go@v6
+        with:
+          go-version: '1.26.4'
+          check-latest: true
+      - run: go mod download
+      - name: Start Postgres (and sidecars)
+        run: docker compose -f docker-compose.test.yml up -d
+      - name: Wait for Postgres
+        run: |
+          for i in $(seq 1 40); do
+            if docker compose -f docker-compose.test.yml exec -T postgres pg_isready -U bffx -d bffx; then
+              exit 0
+            fi
+            sleep 1
+          done
+          docker compose -f docker-compose.test.yml logs postgres
+          exit 1
+      - name: go test -tags=integration (postgres only)
+        env:
+          DATABASE_URL: postgres://bffx:bffx@127.0.0.1:5433/bffx?sslmode=disable
+        run: go test -tags=integration -count=1 -run="^(TestPostgresIntegrationFromEnv|TestLoadAll_InjectsRefreshToken)$" ./tests/integration/...
+      - name: Build bffx CLI
+        run: go build -o bffx ./cmd/bffx
+      - name: go test -tags=integration (docker stack only)
+        run: go test -tags=integration -count=1 -run="^TestBffxUpStackStartsHealthy$" ./tests/integration/...
+
+  test-e2e:
+    name: Full E2E (Nightly/Manual)
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Set up Go
+        uses: actions/setup-go@v6
+        with:
+          go-version: '1.26.4'
+      - name: Run Acceptance Tests
+        run: go test -v ./tests/acceptance/...
+      - name: Run E2E Tests
+        run: go test -tags=experimental_mongo,experimental_pocketbase -v ./tests/e2e/...

@@ -1,0 +1,13 @@
+apiVersion: bffx.io/v1alpha1
+kind: Builder
+metadata:
+  name: HomeScreen
+spec:
+  route:
+    method: GET
+    path: /api/v1/screens/home
+    auth: required
+  sources:
+    - currentUser
+  output:
+    user: currentUser

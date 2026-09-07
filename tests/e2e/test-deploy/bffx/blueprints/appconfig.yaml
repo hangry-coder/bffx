@@ -1,0 +1,11 @@
+apiVersion: bffx.io/v1alpha1
+kind: Blueprint
+metadata:
+  name: AppConfigDefault
+spec:
+  resource: AppConfig
+  fields:
+    key: "ipsum"
+    value: "ipsum"
+    type: "libero"
+    description: "consectetur consectetur curabitur sit elit ipsum vel amet amet libero"

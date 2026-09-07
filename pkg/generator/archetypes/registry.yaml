@@ -1,0 +1,269 @@
+# BFFX Archetype Registry
+# Maps CLI aliases to pre-configured project templates and pipeline setups.
+
+archetypes:
+  - name: notes
+    description: "Reference CRUD application with screen builders, actions, and custom hooks."
+    auth_strategy: optional
+    layout: legacy
+    minimal: false
+    batteries:
+      auth: builtin
+      store: sqlite
+      cache: memory
+      blob: local
+      analytics: noop
+      observability: slog
+      flags: bffx
+      i18n: builtin
+    runtime:
+      redis: false
+      worker: false
+      streaming: false
+    addons:
+      monetization: false
+      flags: true
+      telemetry: false
+      ads: false
+
+  - name: superapp
+    description: "Multi-service ecosystem with clerk auth, postgres, upstash + asynq, R2, and chatbot + RAG pipelines."
+    auth_strategy: mandatory
+    layout: v2
+    minimal: false
+    batteries:
+      auth: clerk
+      store: postgres
+      cache: upstash
+      blob: r2
+      analytics: posthog
+      observability: slog
+      flags: bffx
+      i18n: builtin
+    runtime:
+      redis: true
+      worker: true
+      worker_language: python
+      streaming: true
+    addons:
+      monetization: true
+      flags: true
+      telemetry: true
+      ads: true
+    pipeline:
+      type: chatbot
+      name: Support
+      feature: support
+
+  - name: fintech
+    description: "Irregular income tracker & financial advisor with secure receipt scan ingestion."
+    auth_strategy: mandatory
+    layout: v2
+    minimal: false
+    batteries:
+      auth: clerk
+      store: postgres
+      cache: upstash
+      blob: r2
+      analytics: posthog
+      observability: slog
+      flags: bffx
+      i18n: builtin
+    runtime:
+      redis: true
+      worker: true
+      worker_language: python
+      streaming: false
+    addons:
+      monetization: true
+      flags: true
+      telemetry: true
+      ads: false
+    pipeline:
+      type: ingestion
+      name: ReceiptScan
+      feature: finance
+
+  - name: marketplace
+    description: "Hyper-local on-demand marketplace with maps, geo-queries, and push alerts."
+    auth_strategy: optional
+    layout: v2
+    minimal: false
+    batteries:
+      auth: clerk
+      store: postgres
+      cache: upstash
+      blob: local
+      analytics: posthog
+      observability: slog
+      flags: bffx
+      i18n: builtin
+    runtime:
+      redis: true
+      worker: true
+      worker_language: python
+      streaming: true
+    addons:
+      monetization: true
+      flags: true
+      telemetry: true
+      ads: false
+
+  - name: microlearn
+    description: "Micro-learning / flashcards platform with URL content condensing."
+    auth_strategy: optional
+    layout: v2
+    minimal: false
+    batteries:
+      auth: clerk
+      store: postgres
+      cache: upstash
+      blob: local
+      analytics: posthog
+      observability: slog
+      flags: bffx
+      i18n: builtin
+    runtime:
+      redis: true
+      worker: false
+      streaming: false
+    addons:
+      monetization: false
+      flags: true
+      telemetry: true
+      ads: true
+
+  - name: dictation
+    description: "Meeting transcriber & assistant with audio uploads and async pipeline parsing."
+    auth_strategy: mandatory
+    layout: v2
+    minimal: false
+    batteries:
+      auth: workos
+      store: postgres
+      cache: upstash
+      blob: r2
+      analytics: posthog
+      observability: slog
+      flags: bffx
+      i18n: builtin
+    runtime:
+      redis: true
+      worker: true
+      worker_language: python
+      streaming: false
+    addons:
+      monetization: true
+      flags: true
+      telemetry: true
+      ads: false
+    pipeline:
+      type: ingestion # Interim until audio type is fully implemented in framework core
+      name: AudioUpload
+      feature: meetings
+
+  - name: subscriptions
+    description: "Subscription email automation platform with inbox scanning."
+    auth_strategy: mandatory
+    layout: v2
+    minimal: false
+    batteries:
+      auth: clerk
+      store: postgres
+      cache: upstash
+      blob: local
+      analytics: posthog
+      observability: slog
+      flags: bffx
+      i18n: builtin
+    runtime:
+      redis: true
+      worker: true
+      worker_language: python
+      streaming: false
+    addons:
+      monetization: true
+      flags: true
+      telemetry: true
+      ads: false
+    pipeline:
+      type: ingestion
+      name: InboxParse
+      feature: inbox
+
+  - name: commerce
+    description: "E-commerce platform with product scanner and secure Stripe payments."
+    auth_strategy: optional
+    layout: v2
+    minimal: false
+    batteries:
+      auth: clerk
+      store: postgres
+      cache: upstash
+      blob: r2
+      analytics: posthog
+      observability: slog
+      flags: bffx
+      i18n: builtin
+    runtime:
+      redis: true
+      worker: false
+      streaming: false
+    addons:
+      monetization: true
+      flags: true
+      telemetry: true
+      ads: false
+    pipeline:
+      type: ingestion
+      name: ProductScan
+      feature: catalog
+
+  - name: web3
+    description: "Decentralized community feed & token wallet tracking."
+    auth_strategy: optional
+    layout: v2
+    minimal: false
+    batteries:
+      auth: clerk
+      store: postgres
+      cache: upstash
+      blob: local
+      analytics: posthog
+      observability: slog
+      flags: bffx
+      i18n: builtin
+    runtime:
+      redis: true
+      worker: false
+      streaming: false
+    addons:
+      monetization: false
+      flags: true
+      telemetry: true
+      ads: false
+
+  - name: iot
+    description: "Smart home dashboard & hardware telemetry hub."
+    auth_strategy: mandatory
+    layout: v2
+    minimal: false
+    batteries:
+      auth: clerk
+      store: postgres
+      cache: upstash
+      blob: local
+      analytics: posthog
+      observability: slog
+      flags: bffx
+      i18n: builtin
+    runtime:
+      redis: true
+      worker: true
+      worker_language: python
+      streaming: true
+    addons:
+      monetization: false
+      flags: true
+      telemetry: true
+      ads: false

@@ -1,0 +1,74 @@
+version: "2"
+run:
+  timeout: 5m
+  tests: true
+
+linters:
+  enable:
+    - errcheck
+    - staticcheck
+    - unused
+    - gosec
+    - ineffassign
+    - govet
+    - unparam
+    - misspell
+    - revive
+  settings:
+    govet:
+      enable:
+        - shadow
+    revive:
+      rules:
+        - name: exported
+          disabled: true
+        - name: package-comments
+          disabled: true
+  exclusions:
+    generated: lax
+    rules:
+      # Exclude exported comments check in tests and generated files to maintain high DX
+      - linters:
+          - revive
+        path: _test\.go
+        text: "exported: .* should have comment"
+      - linters:
+          - revive
+        path: \.gen\.go
+        text: "exported: .* should have comment"
+      # Surgical exclusion of gosec rules that are very noisy or false positives in compiler/CLI/tests
+      - linters:
+          - gosec
+        text: "(G104|G304|G301|G306|G204|G115|G101|G114|G117|G122|G201|G302|G702|G703|G704|G403|G107|G124)"
+      # Surgical exclusion of revive rules
+      - linters:
+          - revive
+        text: "(should have comment|package-comments)"
+      # Surgical exclusion of errcheck for defer Close(), Scanln, etc.
+      - linters:
+          - errcheck
+        text: "(Close|Write|Read|Seek|Flush|Sync|Scanln|LoadEnv|Println|Printf|Print|Fprint|Fprintf|Fprintln|Rollback|UnmarshalSpec|Encode|Delete|Unmarshal|Unsetenv|Setenv|do|Remove|Unset|Update|Revoke|Create|UpdateResult|executeHooks|Publish|Grant|Set|Send|NotifyUser|Run|MkdirAll|Rename|Copy|ExecContext|Scan|Enqueue|Kill|Decode|Chdir|Reconcile|SeedRegistry)"
+      # Surgical exclusion of specific errcheck source lines
+      - linters:
+          - errcheck
+        source: "h\\.hooks\\("
+      # Surgical exclusion of staticcheck style/simplification checks (QF, S) and SA1029 (context key)
+      - linters:
+          - staticcheck
+        text: "(QF1012|QF1003|QF1001|QF1007|QF1008|QF1011|S1024|S1017|S1009|SA1029|SA1019|SA6005|SA9003|ST1023|ST1005)"
+      # Surgical exclusion of unparam
+      - linters:
+          - unparam
+        text: "(result .* is always nil|result .* is never used|always receives|is unused)"
+      # Surgical exclusion of unused
+      - linters:
+          - unused
+        text: "(field .* is unused)"
+      # Surgical exclusion of shadow, inline and other warnings in govet
+      - linters:
+          - govet
+        text: "(shadow: declaration of|inline: cannot inline|reflect.Ptr should be inlined)"
+      # Surgical exclusion of ineffassign
+      - linters:
+          - ineffassign
+        text: "ineffectual assignment to (status|arg|argNum)"

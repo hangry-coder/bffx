@@ -1,0 +1,17 @@
+apiVersion: bffx.io/v1alpha1
+kind: Screen
+metadata:
+  name: AuthGateway
+spec:
+  group: mobile
+  name: AuthGateway
+  nav_type: onboarding
+  icon: 
+  order: 0
+  requires_auth: 
+  route:
+    method: GET
+    path: /api/v1/screens/authgateway
+    auth: optional
+  sources: []
+  output: {}

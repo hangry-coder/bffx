@@ -1,0 +1,19 @@
+apiVersion: bffx.io/v1alpha1
+kind: Project
+metadata:
+  name: MinimalApp
+spec:
+  runtime:
+    api: { language: go, port: 8080 }
+    worker: { language: python, enabled: false }
+    redis: { enabled: false }
+  store:
+    mode: memory
+  defaults:
+    auth: builtin
+    files: true
+    jobs: true
+    builders: true
+  app:
+    namespace: com.example.minimal
+    apiPrefix: /api/v1

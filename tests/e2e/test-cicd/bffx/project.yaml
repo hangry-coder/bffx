@@ -1,0 +1,39 @@
+apiVersion: bffx.io/v1alpha1
+kind: Project
+metadata:
+  name: test-cicd
+spec:
+  runtime:
+    api:
+      language: go
+      port: 8080
+    worker:
+      language: python
+      enabled: true
+    redis:
+      enabled: true
+    streaming:
+      enabled: true
+  store:
+    mode: sqlite
+    path: .bffx/app.db
+  defaults:
+    auth: builtin
+    files: true
+    jobs: true
+    builders: true
+  app:
+    authStrategy: optional
+    namespace: com.example.test-cicd
+    apiPrefix: /api/v1
+    permissions:
+      - { type: notifications, required: true, justification: "Required to send you daily goal reminders and security alerts." }
+      - { type: location, required: false, justification: "Used to show you nearby fitness centers." }
+    ui:
+      welcome_title: "Welcome to test-cicd!"
+      primary_action: "Get Started"
+    menu:
+      - { label: "Home", icon: "home", path: "/home" }
+      - { label: "Settings", icon: "settings", path: "/settings" }
+  admin:
+    enabled: true

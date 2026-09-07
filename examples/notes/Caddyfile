@@ -1,0 +1,23 @@
+# Production Caddyfile for SSL termination.
+# Replace your-domain.com with your actual production domain.
+# Or use :80 for testing HTTP locally/staging.
+
+your-domain.com {
+    reverse_proxy orchestrator:8080
+
+    # Production security headers
+    header {
+        # Disable FLoC tracking
+        Permissions-Policy "interest-cohort=()"
+        # Enable HSTS (HTTP Strict Transport Security)
+        Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+        # Prevent Clickjacking
+        X-Frame-Options "DENY"
+        # Prevent MIME-sniffing
+        X-Content-Type-Options "nosniff"
+        # XSS Protection
+        X-XSS-Protection "1; mode=block"
+        # Referrer Policy
+        Referrer-Policy "strict-origin-when-cross-origin"
+    }
+}

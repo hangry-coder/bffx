@@ -1,0 +1,22 @@
+apiVersion: bffx.io/v1alpha1
+kind: Pipeline
+metadata:
+  name: ReceiptScan
+spec:
+  type: ingestion
+  route:
+    method: POST
+    path: /api/v1/pipelines/receiptscan
+    auth: required
+  model_routing:
+    - gemini
+  catalog:
+    adapter: plaid
+  settings:
+    compression_max_width: 800
+    cache_bypass: false
+  hooks:
+    beforePipeline:
+      - action: BeforeReceiptScan
+    afterPipeline:
+      - action: AfterReceiptScan

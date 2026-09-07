@@ -1,0 +1,9 @@
+apiVersion: bffx.io/v1alpha1
+kind: Action
+metadata:
+  name: MockTranscribe
+spec:
+  route:
+    method: POST
+    path: /api/v1/meetings/mock-transcribe
+    auth: required

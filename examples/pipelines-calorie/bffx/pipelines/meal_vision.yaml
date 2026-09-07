@@ -1,0 +1,18 @@
+apiVersion: bffx.io/v1alpha1
+kind: Pipeline
+metadata:
+  name: MealVision
+spec:
+  type: ingestion
+  execution: sync
+  route:
+    method: POST
+    path: /api/v1/meals/scan
+    auth: optional
+  model_routing:
+    - noop
+  catalog:
+    adapter: openfoodfacts
+  settings:
+    compression_max_width: 800
+    cache_bypass: false

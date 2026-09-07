@@ -1,0 +1,13 @@
+apiVersion: bffx.io/v1alpha1
+kind: Blueprint
+metadata:
+  name: TelemetryEventDefault
+spec:
+  count: 20
+  resource: TelemetryEvent
+  fields:
+    user_id: "amet"
+    event_type: "sit"
+    screen_name: "Onboarding"
+    action_name: "Swipe"
+    properties: "dolor"

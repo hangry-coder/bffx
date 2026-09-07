@@ -1,0 +1,6 @@
+port: 8080
+logLevel: debug
+redis:
+  url: redis://localhost:6379
+env:
+  BFFX_ENV: development

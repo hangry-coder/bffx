@@ -1,0 +1,22 @@
+apiVersion: bffx.io/v1alpha1
+kind: Screen
+metadata:
+  name: NoteList
+spec:
+  group: mobile
+  name: NoteList
+  nav_type: bottom
+  icon: note
+  order: 1
+  requires_auth: required
+  route:
+    method: GET
+    path: /api/v1/screens/note-list
+    auth: required
+  sources:
+    - currentUser
+    - kind: Resource
+      name: Note
+  output:
+    user: currentUser
+    notes: Note

@@ -1,0 +1,10 @@
+apiVersion: bffx.io/v1alpha1
+kind: Blueprint
+metadata:
+  name: EntitlementDefault
+spec:
+  resource: Entitlement
+  fields:
+    user_id: "dolor"
+    key: "hendrerit"
+    granted: false

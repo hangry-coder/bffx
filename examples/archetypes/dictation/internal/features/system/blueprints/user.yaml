@@ -1,0 +1,17 @@
+apiVersion: bffx.io/v1alpha1
+kind: Blueprint
+metadata:
+  name: UserDefault
+spec:
+  resource: User
+  fields:
+    email: "jessica.jones@hey.com"
+    password: "password123"
+    name: "Jessica Garcia"
+    role: "viewer"
+    status: "completed"
+    device_id: "curabitur"
+    phone: "+16789132004"
+    whatsapp: "+17057291540"
+    is_verified: true
+    otp_code: "354151"

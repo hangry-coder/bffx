@@ -1,0 +1,10 @@
+apiVersion: bffx.io/v1alpha1
+kind: Blueprint
+metadata:
+  name: OnboardingSurveyDefault
+spec:
+  resource: OnboardingSurvey
+  fields:
+    user_id: "dolor"
+    question: "libero"
+    answer: "dolor"

@@ -1,0 +1,11 @@
+test-flag:
+  variations:
+    true_var: true
+    false_var: false
+  defaultRule:
+    variation: true_var
+  targeting:
+    - query: key eq "admin-user"
+      percentage:
+        true_var: 100
+        false_var: 0

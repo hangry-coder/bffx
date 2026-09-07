@@ -1,0 +1,5 @@
+.bffx/
+*.db
+*.test.bin
+cmd/api/registry.gen.go
+cmd/api/hooks.gen.go

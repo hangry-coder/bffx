@@ -1,0 +1,11 @@
+apiVersion: bffx.io/v1alpha1
+kind: AdminDashboard
+metadata:
+  name: main
+spec:
+  widgets:
+    - type: metric
+      title: Total Notes
+      query:
+        resource: Note
+        aggregate: count

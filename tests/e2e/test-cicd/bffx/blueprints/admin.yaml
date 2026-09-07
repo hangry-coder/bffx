@@ -1,0 +1,11 @@
+apiVersion: bffx.io/v1alpha1
+kind: Blueprint
+metadata:
+  name: InitialAdmin
+spec:
+  resource: AdminUser
+  count: 1
+  defaults:
+    email: admin@example.com
+    password: admin123
+    role: superadmin

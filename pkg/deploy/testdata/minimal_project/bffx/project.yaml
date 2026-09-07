@@ -1,0 +1,20 @@
+apiVersion: bffx.io/v1alpha1
+kind: Project
+metadata:
+  name: DeployInitGolden
+spec:
+  runtime:
+    api: { language: go, port: 8080 }
+    worker: { language: python, enabled: true }
+    redis: { enabled: false }
+  store:
+    mode: sqlite
+    path: .bffx/app.db
+  defaults:
+    auth: builtin
+    files: true
+    jobs: false
+    builders: true
+  app:
+    namespace: com.example.deployinit
+    apiPrefix: /api/v1

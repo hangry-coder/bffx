@@ -1,0 +1,6 @@
+{
+  "name": "Obsidian Admin",
+  "description": "A high-performance system administration console with real-time telemetry and advanced analytics.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

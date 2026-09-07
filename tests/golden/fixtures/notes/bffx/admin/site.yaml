@@ -1,0 +1,13 @@
+apiVersion: bffx.io/v1alpha1
+kind: AdminSite
+metadata:
+  name: default
+spec:
+  title: "Notes App Admin"
+  theme: dark
+  default_per_page: 15
+  export:
+    csv_enabled: true
+  features:
+    api_docs: true
+    jobs: false

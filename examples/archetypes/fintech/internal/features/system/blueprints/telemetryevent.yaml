@@ -1,0 +1,13 @@
+apiVersion: bffx.io/v1alpha1
+kind: Blueprint
+metadata:
+  name: TelemetryEventDefault
+spec:
+  count: 20
+  resource: TelemetryEvent
+  fields:
+    user_id: "curabitur"
+    event_type: "curabitur"
+    screen_name: "Onboarding"
+    action_name: "Submit"
+    properties: "sit"

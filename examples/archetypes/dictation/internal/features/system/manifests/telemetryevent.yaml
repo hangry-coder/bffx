@@ -1,0 +1,19 @@
+apiVersion: bffx.io/v1alpha1
+kind: Resource
+metadata:
+  name: TelemetryEvent
+spec:
+  telemetry: true
+  group: system
+  fields:
+    - { name: user_id, type: string }
+    - { name: event_type, type: string }
+    - { name: screen_name, type: string }
+    - { name: action_name, type: string }
+    - { name: properties, type: string }
+  routes:
+    crud: true
+  policy:
+    read: owner
+    write: owner
+  hooks: {}

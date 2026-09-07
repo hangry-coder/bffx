@@ -1,0 +1,11 @@
+apiVersion: bffx.io/v1alpha1
+kind: Blueprint
+metadata:
+  name: SubscriptionDefault
+spec:
+  resource: Subscription
+  fields:
+    user_id: "dolor"
+    plan_id: "Premium Plan"
+    status: "archived"
+    expires_at: "consectetur"

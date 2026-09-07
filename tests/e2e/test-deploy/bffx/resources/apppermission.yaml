@@ -1,0 +1,17 @@
+apiVersion: bffx.io/v1alpha1
+kind: Resource
+metadata:
+  name: AppPermission
+spec:
+  group: mobile
+  fields:
+    - { name: device_id, type: string }
+    - { name: location_granted, type: bool }
+    - { name: notifications_granted, type: bool }
+    - { name: push_granted, type: bool }
+  routes:
+    crud: true
+  policy:
+    read: owner
+    write: owner
+  hooks: {}

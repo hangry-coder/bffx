@@ -1,0 +1,32 @@
+# Local / CI integration stack for `go test -tags=integration ./tests/integration/...`.
+# Postgres is required by `TestPostgresIntegrationFromEnv`. Redis and MinIO are optional
+# anchors for future tests (Stripe webhooks, blob presign, cache).
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: bffx
+      POSTGRES_PASSWORD: bffx
+      POSTGRES_DB: bffx
+    ports:
+      - "5433:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U bffx -d bffx"]
+      interval: 3s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 3s
+      timeout: 3s
+      retries: 10
+
+  minio:
+    image: minio/minio:latest
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: bffxminio
+      MINIO_ROOT_PASSWORD: bffxbffxbffx

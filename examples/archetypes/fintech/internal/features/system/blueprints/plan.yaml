@@ -1,0 +1,11 @@
+apiVersion: bffx.io/v1alpha1
+kind: Blueprint
+metadata:
+  name: PlanDefault
+spec:
+  resource: Plan
+  fields:
+    name: "Free Tier"
+    price: 69.87
+    interval: "quarterly"
+    description: "curabitur sit ipsum libero sit elit libero sit hendrerit dolor"

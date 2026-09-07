@@ -1,0 +1,3 @@
+Usage: bffx dev [--root DIR] [--watch]
+  Run compiler sync, build ./cmd/orchestrator, and start the API server.
+  --watch: Monitor manifests, hooks, and cmd/ for changes and restart.

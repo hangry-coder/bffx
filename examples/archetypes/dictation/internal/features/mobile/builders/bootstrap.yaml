@@ -1,0 +1,23 @@
+apiVersion: bffx.io/v1alpha1
+kind: Builder
+metadata:
+  name: Bootstrap
+spec:
+  route:
+    method: GET
+    path: /api/v1/app/bootstrap
+    auth: optional
+  sources:
+    - app
+    - currentUser
+    - i18n
+    - navigation
+    - onboarding
+    - { kind: Resource, name: AppConfig }
+  output:
+    app: app
+    auth.user: currentUser
+    translations: i18n
+    navigation: navigation
+    onboarding: onboarding
+    config: AppConfig

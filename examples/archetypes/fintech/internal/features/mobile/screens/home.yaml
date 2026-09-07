@@ -1,0 +1,19 @@
+apiVersion: bffx.io/v1alpha1
+kind: Screen
+metadata:
+  name: Home
+spec:
+  group: mobile
+  name: Home
+  nav_type: bottom
+  icon: home
+  order: 1
+  requires_auth: required
+  route:
+    method: GET
+    path: /api/v1/screens/home
+    auth: required
+  sources:
+    - currentUser
+  output:
+    user: currentUser

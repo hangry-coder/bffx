@@ -1,0 +1,15 @@
+
+.git
+.gitignore
+bin/
+*.test
+tests/
+specs/
+*.db
+*.db-shm
+*.db-wal
+.bffx/*.db
+.env
+.env.*
+.DS_Store
+gen/

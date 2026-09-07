@@ -1,0 +1,14 @@
+apiVersion: bffx.io/v1alpha1
+kind: Resource
+metadata:
+  name: User
+spec:
+  fields:
+    - { name: email, type: string }
+    - { name: password, type: string }
+    - { name: name, type: string }
+  routes:
+    crud: true
+  policy:
+    read: owner
+    write: owner

@@ -1,0 +1,21 @@
+# BFFX AI interaction rules
+
+Align with humans, **Antigravity**, and other **Cursor** sessions via **`intel/`** and **[`README.md`](README.md)**.
+
+## 1. Intel sync (mandatory for non-trivial work)
+
+- **Read first:** [`README.md`](README.md) — *Where things live* + *Guardrails*. Then [`intel/active_tasks.md`](intel/active_tasks.md) and the latest entries in [`intel/history.md`](intel/history.md).
+- **Claims / ownership:** when taking a task, mark it in **`intel/active_tasks.md`** with **` — #cursor`**. (Antigravity: **`#ag`**, humans: **`#human`**.)
+- **After substantive work:** append to **`intel/history.md`** (tag **`#cursor`**); update checkboxes / list in **`intel/active_tasks.md`**. Skip churn for typo-only edits unless they affect correctness or contracts.
+- **Durable norms** (security, schema, manifests): keep them accurate in **[`README.md`](README.md)** under *Guardrails*; don’t fork a second “decisions” doc.
+
+## 2. Architectural guardrails
+
+- No ad-hoc SQL string concatenation — use whitelisted / parameterized paths in **`pkg/storage`**.
+- Use **`crypto/subtle`** for secret comparisons; never hardcode secrets.
+- **`bffx/`** manifests are source of truth; do not hand-edit **`cmd/orchestrator/`** generated code.
+
+## 3. Communication
+
+- Be concise.
+- **`docs/`** = reference truth; **`plan/v2/`** = long narratives; **`graphify-out/`** = structural graph artifacts; **`intel/`** = session + task handshake.

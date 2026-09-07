@@ -1,0 +1,9 @@
+apiVersion: bffx.io/v1alpha1
+kind: Action
+metadata:
+  name: ShareNote
+spec:
+  route:
+    method: POST
+    path: /api/v1/notes/share
+    auth: required

@@ -1,0 +1,30 @@
+bffx 0.1.3-beta
+usage:
+  bffx new NAME
+  bffx sync [--dry-run]
+  bffx dev
+  bffx build
+  bffx test
+  bffx routes list
+  bffx generate resource NAME field:type ...
+  bffx generate scaffold NAME field:type ...
+  bffx generate builder NAME
+  bffx generate action NAME
+  bffx generate skill NAME
+  bffx generate function NAME
+  bffx generate service NAME
+  bffx generate stream NAME
+  bffx generate pipeline TYPE --name NAME --feature FEATURE [--catalog=ADAPTER]
+  bffx generate client [platform]
+  bffx add admin
+  bffx env check
+  bffx mcp serve [--transport stdio|http]
+  bffx doctor
+  bffx migrate [init|plan|apply|status|diff|layout|packaging]
+  bffx db backup [--path FILE]   (SQLite-only, online VACUUM INTO snapshot)
+  bffx upgrade
+  bffx deploy [init|ship|rollback|status|cloud]
+  bffx update framework [--vendor-only] [--root DIR] [--dry-run] [--force]
+  bffx lint [--root DIR] [--strict]
+  bffx seed [--root DIR] [--upsert]
+  bffx check [--root DIR] [--strict]

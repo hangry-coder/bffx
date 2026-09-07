@@ -1,0 +1,63 @@
+# Binaries
+/bffx
+/bffx_bin
+/bffx_cli
+/coverage.out
+bin/
+build/
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Data & Runtime (Generated)
+.bffx/
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+*.log
+
+# Environment & Sensitive
+.env
+.env.local
+.env.*.local
+
+# Go dependencies
+vendor/
+go.work
+go.work.sum
+
+# OS & Workspace
+.DS_Store
+.idea/
+.vscode/
+.cursor/
+.gemini/
+*-temp/
+*.swp
+
+#External Apps & Docs
+external_apps/
+example_product_plan/
+test-projects/
+tests/e2e/logs/
+verify_roadmap/
+
+# Pilot Projects (each has its own git repo)
+pilot_project/
+
+# Graphify (Knowledge Graph)
+graphify-out/
+/pilot_project
+
+# Local Context Archive (Safe History Preservation)
+.archive/
+
+# Temporary admin redesign workspace
+plan/framework/v0.1.0/todo/
+
+# Node dependencies & Docs build
+node_modules/
+docs/.vitepress/dist/
+docs/.vitepress/cache/

@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  bffx:
+    build:
+      context: ../..
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      - BFFX_ENV=production
+      - PORT=8080
+      - BFFX_STORAGE_DRIVER=postgres
+      - BFFX_POSTGRES_DSN=postgres://bffx:secret@postgres:5432/bffx_prod?sslmode=disable
+      - REDIS_URL=redis://redis:6379/0
+      - BFFX_JWT_SECRET=${BFFX_JWT_SECRET:-change-this-in-production-random-secret-key-32b}
+    volumes:
+      - bffx_data:/app/.bffx/data
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: bffx
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: bffx_prod
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U bffx -d bffx_prod"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  bffx_data:
+  pg_data:
+  redis_data:

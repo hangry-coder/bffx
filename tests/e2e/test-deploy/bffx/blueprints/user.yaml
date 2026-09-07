@@ -1,0 +1,17 @@
+apiVersion: bffx.io/v1alpha1
+kind: Blueprint
+metadata:
+  name: UserDefault
+spec:
+  resource: User
+  fields:
+    email: "jessica.williams@gmail.com"
+    password: "sit"
+    name: "Barbara Anderson"
+    role: "admin"
+    status: "completed"
+    device_id: "adipiscing"
+    phone: "+19035212836"
+    whatsapp: "+14176478152"
+    is_verified: true
+    otp_code: "411967"

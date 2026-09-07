@@ -1,0 +1,10 @@
+apiVersion: bffx.io/v1alpha1
+kind: Blueprint
+metadata:
+  name: EntitlementDefault
+spec:
+  resource: Entitlement
+  fields:
+    user_id: "vel"
+    key: "adipiscing"
+    granted: true

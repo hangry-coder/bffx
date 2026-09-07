@@ -1,0 +1,10 @@
+apiVersion: bffx.io/v1alpha1
+kind: Blueprint
+metadata:
+  name: DeviceDefault
+spec:
+  resource: Device
+  fields:
+    platform: "dolor"
+    is_onboarded: false
+    is_guest: true

@@ -1,0 +1,17 @@
+apiVersion: bffx.io/v1alpha1
+kind: Resource
+metadata:
+  name: Plan
+spec:
+  group: system
+  fields:
+    - { name: name, type: string }
+    - { name: price, type: float }
+    - { name: interval, type: string }
+    - { name: description, type: string }
+  routes:
+    crud: true
+  policy:
+    read: owner
+    write: owner
+  hooks: {}

@@ -1,0 +1,36 @@
+@import url('https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans:wght@400;500;600&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Noto Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Hanken Grotesk", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  --color-surface-dim: var(--surface-dim);
+  --color-surface-card: var(--surface-card);
+  --color-border-subtle: var(--border-subtle);
+  --color-text-main: var(--text-main);
+  --color-background: var(--bg-main);
+}
+
+:root {
+  --surface-dim: #f8fafc;
+  --surface-card: #ffffff;
+  --border-subtle: #e2e8f0;
+  --bg-main: #f1f5f9;
+  --text-main: #0f172a;
+}
+
+.dark {
+  --surface-dim: #0f172a;
+  --surface-card: #1e293b;
+  --border-subtle: #334155;
+  --bg-main: #020617;
+  --text-main: #f8fafc;
+}
+
+@layer base {
+  body {
+    @apply bg-[var(--bg-main)] text-[var(--text-main)] font-sans antialiased transition-colors duration-300;
+  }
+}

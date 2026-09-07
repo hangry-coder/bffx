@@ -1,0 +1,20 @@
+apiVersion: bffx.io/v1alpha1
+kind: Resource
+metadata:
+  name: AuditLog
+spec:
+  group: system
+  fields:
+    - { name: actor_id, type: string }
+    - { name: actor_type, type: string }
+    - { name: action, type: string }
+    - { name: resource_kind, type: string }
+    - { name: resource_id, type: string }
+    - { name: payload, type: string }
+    - { name: ip_address, type: string }
+  routes:
+    crud: true
+  policy:
+    read: admin
+    write: admin
+  hooks: {}

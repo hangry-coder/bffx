@@ -1,0 +1,11 @@
+apiVersion: bffx.io/v1alpha1
+kind: Blueprint
+metadata:
+  name: AppConfigDefault
+spec:
+  resource: AppConfig
+  fields:
+    key: "lorem"
+    value: "amet"
+    type: "adipiscing"
+    description: "libero ipsum hendrerit amet hendrerit consectetur adipiscing elit adipiscing dolor"

@@ -1,0 +1,40 @@
+services:
+  orchestrator:
+    image: ${BFFX_DEPLOY_IMAGE:-ghcr.io/user/app}:${BFFX_DEPLOY_TAG:-latest}
+    build: !reset [] # Disable build on prod
+    # Exposing port 8080 directly on host is insecure. Use the Caddy sidecar below for SSL.
+    # ports:
+    #   - "8080:8080"
+    expose:
+      - "8080"
+    env_file: .env
+    environment:
+      - BFFX_ENV=production
+      - PORT=8080
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  # Production Reverse Proxy with TLS termination using Caddy.
+  # Update Caddyfile with your actual production domain.
+  caddy:
+    image: caddy:2.7-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      orchestrator:
+        condition: service_healthy
+
+volumes:
+  caddy_data:
+  caddy_config:

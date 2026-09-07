@@ -1,0 +1,9 @@
+apiVersion: bffx.io/v1alpha1
+kind: Blueprint
+metadata:
+  name: InterestDefault
+spec:
+  resource: Interest
+  fields:
+    name: "Joseph Davis"
+    category: "libero"

@@ -1,0 +1,27 @@
+# GO Feature Flag example configuration
+# This file is used by the goff battery in BFFX.
+
+ai-vision-provider:
+  variations:
+    gemini: "google"
+    gpt4: "openai"
+    claude: "anthropic"
+  defaultRule:
+    variation: gemini
+  targeting:
+    - query: plan eq "enterprise"
+      variation: gpt4
+    - query: country eq "FR"
+      variation: claude
+
+new-dashboard-layout:
+  variations:
+    classic: false
+    modern: true
+  defaultRule:
+    variation: classic
+  targeting:
+    - query: version >= "2.0.0"
+      percentage:
+        classic: 50
+        modern: 50

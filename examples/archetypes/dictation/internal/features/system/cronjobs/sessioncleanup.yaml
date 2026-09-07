@@ -1,0 +1,8 @@
+apiVersion: bffx.io/v1alpha1
+kind: CronJob
+metadata:
+  name: SessionCleanup
+spec:
+  schedule: "0 0 * * *"
+  action: SessionCleanupAction
+  description: "Automatically generated cronjob for SessionCleanup"

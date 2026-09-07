@@ -1,0 +1,11 @@
+apiVersion: bffx.io/v1alpha1
+kind: Blueprint
+metadata:
+  name: IntroConfig
+spec:
+  resource: AppConfig
+  items:
+    - { key: "onboarding.intro.title_1", value: "Welcome to dictation" }
+    - { key: "onboarding.intro.subtitle_1", value: "Your tagline goes here" }
+    - { key: "onboarding.intro.title_2", value: "Feature Two" }
+    - { key: "onboarding.intro.title_3", value: "Feature Three" }

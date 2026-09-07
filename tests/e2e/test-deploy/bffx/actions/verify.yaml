@@ -1,0 +1,9 @@
+apiVersion: bffx.io/v1alpha1
+kind: Action
+metadata:
+  name: VerifyOTP
+spec:
+  route:
+    method: POST
+    path: /api/v1/auth/verify
+    auth: optional

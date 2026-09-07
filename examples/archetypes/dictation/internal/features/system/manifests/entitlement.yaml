@@ -1,0 +1,16 @@
+apiVersion: bffx.io/v1alpha1
+kind: Resource
+metadata:
+  name: Entitlement
+spec:
+  group: system
+  fields:
+    - { name: user_id, type: string }
+    - { name: key, type: string }
+    - { name: granted, type: bool }
+  routes:
+    crud: true
+  policy:
+    read: owner
+    write: owner
+  hooks: {}

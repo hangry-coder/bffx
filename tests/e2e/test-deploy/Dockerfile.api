@@ -1,0 +1,16 @@
+FROM golang:1.26-alpine AS builder
+WORKDIR /app
+ENV GOTOOLCHAIN=auto
+ENV CGO_ENABLED=0
+COPY . .
+RUN go mod tidy && go build -o bffx-server ./cmd/orchestrator/
+
+FROM alpine:latest
+WORKDIR /app
+COPY --from=builder /app/bffx-server .
+COPY --from=builder /app/bffx ./bffx
+COPY --from=builder /app/.bffx ./.bffx
+COPY --from=builder /app/i18n ./i18n
+COPY --from=builder /app/.env .env
+EXPOSE 8080
+CMD ["./bffx-server"]

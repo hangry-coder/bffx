@@ -1,0 +1,14 @@
+apiVersion: bffx.io/v1alpha1
+kind: Blueprint
+metadata:
+  name: AuditLogDefault
+spec:
+  resource: AuditLog
+  fields:
+    actor_id: "curabitur"
+    actor_type: "sit"
+    action: "Refresh"
+    resource_kind: "hendrerit"
+    resource_id: "amet"
+    payload: "hendrerit"
+    ip_address: "vel"

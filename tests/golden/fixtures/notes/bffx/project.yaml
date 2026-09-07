@@ -1,0 +1,35 @@
+apiVersion: bffx.io/v1alpha1
+kind: Project
+metadata:
+  name: notes-example
+spec:
+  runtime:
+    api:
+      language: go
+      port: 8080
+    worker:
+      language: python
+      enabled: false
+    redis:
+      enabled: false
+  store:
+    mode: memory
+  defaults:
+    auth: builtin
+    files: true
+    jobs: true
+    builders: false
+  app:
+    namespace: com.example.notes
+    apiPrefix: /api/v1
+  batteries:
+    auth: builtin
+    store: sqlite
+    cache: memory
+    blob: local
+    analytics: noop
+    observability: slog
+    flags: bffx
+    vlm: noop
+  admin:
+    enabled: true

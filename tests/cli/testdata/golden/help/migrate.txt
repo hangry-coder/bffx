@@ -1,0 +1,3 @@
+Usage: bffx migrate [init|plan|apply|status|diff|layout|packaging] [--root DIR]
+  Versioned SQL migrations for SQLite or Postgres (see docs/migration_guide.md).
+  packaging: guided full <-> minimal build profile migration.

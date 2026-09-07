@@ -1,0 +1,41 @@
+services:
+  orchestrator:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ${PROJECT_NAME:-bffx-app}:latest
+    ports:
+      - "8080:8080"
+    env_file: .env
+    environment:
+      - BFFX_STORE_MODE=memory
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      redis:
+        condition: service_healthy
+    volumes:
+      - app_data:/app/.bffx/data
+      - ./bffx:/app/bffx:ro
+      - ./internal/features:/app/internal/features:ro    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8080/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 8
+      start_period: 60s
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
+
+volumes:
+  app_data:
+  redis_data:

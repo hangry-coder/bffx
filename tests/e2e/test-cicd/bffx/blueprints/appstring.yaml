@@ -1,0 +1,10 @@
+apiVersion: bffx.io/v1alpha1
+kind: Blueprint
+metadata:
+  name: AppStringDefault
+spec:
+  resource: AppString
+  fields:
+    key: "dolor"
+    locale: "ipsum"
+    value: "vel"

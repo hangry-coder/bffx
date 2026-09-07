@@ -1,0 +1,10 @@
+kind: Resource
+metadata:
+  name: Post
+spec:
+  fields:
+    - name: title
+      type: string
+      required: true
+    - name: content
+      type: string

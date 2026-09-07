@@ -1,0 +1,31 @@
+apiVersion: bffx.io/v1alpha1
+kind: Resource
+metadata:
+  name: User
+spec:
+  group: system
+  fields:
+    - { name: email, type: string }
+    - { name: password, type: string }
+    - { name: name, type: string }
+    - { name: role, type: string }
+    - { name: status, type: string }
+    - { name: device_id, type: string }
+    - { name: phone, type: string }
+    - { name: whatsapp, type: string }
+    - { name: bio, type: string }
+    - { name: profile_pic_url, type: string }
+    - { name: is_onboarded, type: bool }
+    - { name: is_verified, type: bool }
+    - { name: otp_code, type: string }
+  routes:
+    crud: true
+  policy:
+    read: owner
+    write: public
+  hooks:
+    afterCreate:
+      - { action: SendOTP, mode: async }
+    afterUpdate:
+      - { action: CheckVerification, mode: sync }
+      - { action: SendWelcome, mode: async }

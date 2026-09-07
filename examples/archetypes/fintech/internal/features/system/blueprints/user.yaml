@@ -1,0 +1,17 @@
+apiVersion: bffx.io/v1alpha1
+kind: Blueprint
+metadata:
+  name: UserDefault
+spec:
+  resource: User
+  fields:
+    email: "david.thomas@protonmail.com"
+    password: "password123"
+    name: "James Garcia"
+    role: "admin"
+    status: "archived"
+    device_id: "amet"
+    phone: "+19727031856"
+    whatsapp: "+14512348126"
+    is_verified: false
+    otp_code: "906292"

@@ -1,0 +1,37 @@
+# Production configuration reference overlay for notes-example
+# Copy this file to production.yaml and supply your credentials/secrets.
+port: 8080
+logLevel: info
+
+redis:
+  url: "redis://default:production-password@your-upstash-redis.upstash.io:6379"
+
+env:
+  BFFX_PORT: "8080"
+  BFFX_ENV: "production"
+
+  # 1. Auth Battery (Clerk integration)
+  # CLERK_SECRET_KEY: "sk_live_..."
+  # CLERK_JWKS_URL: "https://api.clerk.com/v1/jwks"
+
+  # 2. Store Battery (Supabase Postgres)
+  # DATABASE_URL: "postgres://postgres:supabase-password@aws-0-us-east-1.pooler.supabase.com:6543/postgres?sslmode=require"
+
+  # 3. Blob Battery (Cloudflare R2 / S3-compatible)
+  # AWS_ACCESS_KEY_ID: "your-r2-access-key"
+  # AWS_SECRET_ACCESS_KEY: "your-r2-secret-key"
+  # AWS_REGION: "auto"
+  # BFFX_S3_ENDPOINT: "https://your-account-id.r2.cloudflarestorage.com"
+  # BFFX_S3_BUCKET: "your-production-bucket"
+
+  # 4. Analytics Battery (PostHog Integration)
+  # BFFX_POSTHOG_API_KEY: "phc_your_posthog_key"
+  # BFFX_POSTHOG_HOST: "https://us.i.posthog.com"
+
+  # 5. Observability Ingest (Axiom / Sentry)
+  # BFFX_AXIOM_TOKEN: "xaat-your-axiom-token"
+  # BFFX_AXIOM_DATASET: "your-production-dataset"
+  # BFFX_SENTRY_DSN: "https://sentry-key@o12345.ingest.sentry.io/12345"
+
+  # 6. VLM / Calorie APIs (Gemini Flash)
+  # BFFX_GEMINI_API_KEY: "AIzaSy..."

@@ -1,0 +1,11 @@
+apiVersion: bffx.io/v1alpha1
+kind: Blueprint
+metadata:
+  name: AppPermissionDefault
+spec:
+  resource: AppPermission
+  fields:
+    device_id: "ipsum"
+    location_granted: true
+    notifications_granted: true
+    push_granted: true

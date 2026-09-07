@@ -1,0 +1,11 @@
+apiVersion: bffx.io/v1alpha1
+kind: Blueprint
+metadata:
+  name: FeatureFlagDefault
+spec:
+  resource: FeatureFlag
+  fields:
+    key: "adipiscing"
+    enabled: false
+    rules: "hendrerit"
+    description: "libero amet elit dolor vel ipsum ipsum curabitur adipiscing vel"

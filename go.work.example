@@ -1,0 +1,8 @@
+go 1.26.4
+
+use (
+	.
+	./tests/e2e/test-deploy
+	./tests/e2e/test-cicd
+	./tests/integration/test-stack
+)

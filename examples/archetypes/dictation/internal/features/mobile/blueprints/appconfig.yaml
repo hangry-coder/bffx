@@ -1,0 +1,11 @@
+apiVersion: bffx.io/v1alpha1
+kind: Blueprint
+metadata:
+  name: AppConfigDefault
+spec:
+  resource: AppConfig
+  fields:
+    key: "ipsum"
+    value: "dolor"
+    type: "adipiscing"
+    description: "vel elit vel lorem adipiscing elit ipsum amet dolor amet"

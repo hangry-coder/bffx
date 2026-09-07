@@ -1,0 +1,22 @@
+apiVersion: bffx.io/v1alpha1
+kind: Pipeline
+metadata:
+  name: AudioUpload
+spec:
+  type: ingestion
+  route:
+    method: POST
+    path: /api/v1/pipelines/audioupload
+    auth: required
+  model_routing:
+    - gemini
+  catalog:
+    adapter: dictation
+  settings:
+    compression_max_width: 800
+    cache_bypass: false
+  hooks:
+    beforePipeline:
+      - action: BeforeAudioUpload
+    afterPipeline:
+      - action: AfterAudioUpload

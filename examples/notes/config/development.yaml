@@ -1,0 +1,11 @@
+# Development configuration overlay for notes-example
+port: 8080
+logLevel: debug
+
+redis:
+  url: ""
+
+env:
+  # Local batteries configuration variables (offline defaults)
+  BFFX_PORT: "8080"
+  BFFX_ENV: "development"

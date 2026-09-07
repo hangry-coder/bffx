@@ -1,0 +1,13 @@
+apiVersion: bffx.io/v1alpha1
+kind: Builder
+metadata:
+  name: ConnectedDevices
+spec:
+  route:
+    method: GET
+    path: /api/v1/screens/settings/devices
+    auth: required
+  sources:
+    - { kind: Resource, name: Device, query: { user_id: currentUser.id } }
+  output:
+    devices: Device

@@ -1,0 +1,10 @@
+apiVersion: bffx.io/v1alpha1
+kind: Blueprint
+metadata:
+  name: RolloutDefault
+spec:
+  resource: Rollout
+  fields:
+    flag_id: "elit"
+    percentage: 754
+    release_id: "libero"

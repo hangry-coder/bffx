@@ -1,0 +1,15 @@
+apiVersion: bffx.io/v1alpha1
+kind: Resource
+metadata:
+  name: Interest
+spec:
+  group: mobile
+  fields:
+    - { name: name, type: string }
+    - { name: category, type: string }
+  routes:
+    crud: true
+  policy:
+    read: public
+    write: owner
+  hooks: {}

@@ -1,0 +1,11 @@
+apiVersion: bffx.io/v1alpha1
+kind: Blueprint
+metadata:
+  name: FeatureFlagDefault
+spec:
+  resource: FeatureFlag
+  fields:
+    key: "curabitur"
+    enabled: false
+    rules: "amet"
+    description: "curabitur adipiscing sit libero libero vel lorem dolor sit libero"

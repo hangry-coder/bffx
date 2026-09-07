@@ -1,0 +1,35 @@
+apiVersion: bffx.io/v1alpha1
+kind: Project
+metadata:
+  name: pipelines-calorie
+spec:
+  runtime:
+    api:
+      language: go
+      port: 8080
+    worker:
+      language: python
+      enabled: false
+    redis:
+      enabled: false
+  store:
+    mode: memory
+  defaults:
+    auth: builtin
+    files: false
+    jobs: true
+    builders: false
+  app:
+    namespace: com.example.pipelinescalorie
+    apiPrefix: /api/v1
+  layout: v2
+  batteries:
+    auth: builtin
+    store: sqlite
+    cache: memory
+    blob: local
+    analytics: noop
+    observability: slog
+    flags: bffx
+    vlm: noop
+    i18n: builtin

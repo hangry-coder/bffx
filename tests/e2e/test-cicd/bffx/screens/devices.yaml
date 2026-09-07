@@ -1,0 +1,18 @@
+apiVersion: bffx.io/v1alpha1
+kind: Screen
+metadata:
+  name: ConnectedDevices
+spec:
+  group: mobile
+  name: Devices
+  nav_type: folded
+  icon: devices
+  requires_auth: required
+  route:
+    method: GET
+    path: /api/v1/screens/settings/devices
+    auth: required
+  sources:
+    - { kind: Resource, name: Device, query: { user_id: currentUser.id } }
+  output:
+    devices: Device

@@ -1,0 +1,17 @@
+apiVersion: bffx.io/v1alpha1
+kind: Screen
+metadata:
+  name: Login
+spec:
+  group: mobile
+  name: Login
+  nav_type: auth_flow
+  icon: 
+  order: 0
+  requires_auth: 
+  route:
+    method: GET
+    path: /api/v1/screens/login
+    auth: optional
+  sources: []
+  output: {}

@@ -1,0 +1,17 @@
+apiVersion: bffx.io/v1alpha1
+kind: Blueprint
+metadata:
+  name: UserDefault
+spec:
+  resource: User
+  fields:
+    email: "barbara.garcia@icloud.com"
+    password: "sit"
+    name: "Linda Rodriguez"
+    role: "viewer"
+    status: "pending"
+    device_id: "amet"
+    phone: "+15011294960"
+    whatsapp: "+17156424225"
+    is_verified: false
+    otp_code: "703615"

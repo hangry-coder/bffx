@@ -1,0 +1,11 @@
+apiVersion: bffx.io/v1alpha1
+kind: Blueprint
+metadata:
+  name: PlanDefault
+spec:
+  resource: Plan
+  fields:
+    name: "Pro Monthly"
+    price: 79.73
+    interval: "yearly"
+    description: "sit curabitur vel adipiscing consectetur adipiscing sit ipsum ipsum lorem"

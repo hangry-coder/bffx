@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: bffx-backend
+    env: docker
+    plan: starter
+    healthCheckPath: /health
+    disk:
+      name: bffx-data
+      mountPath: /app/.bffx/data
+      sizeGB: 1
+    envVars:
+      - key: BFFX_ENV
+        value: production
+      - key: PORT
+        value: 8080
+      - key: BFFX_STORAGE_DRIVER
+        value: sqlite
+      - key: BFFX_STORAGE_PATH
+        value: /app/.bffx/data/app.db
+      - key: BFFX_JWT_SECRET
+        generateValue: true

@@ -1,0 +1,19 @@
+apiVersion: bffx.io/v1alpha1
+kind: Resource
+metadata:
+  name: Note
+spec:
+  fields:
+    - { name: title, type: string, required: true }
+    - { name: body, type: string }
+    - { name: attachment_key, type: string, bucket: uploads }
+  routes:
+    crud: true
+  policy:
+    read: owner
+    write: owner
+  hooks:
+    beforeCreate:
+      - { action: BeforeCreateNote, mode: sync }
+    afterCreate:
+      - { action: AfterCreateNote, mode: sync }

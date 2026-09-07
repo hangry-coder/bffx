@@ -1,0 +1,6 @@
+port: 80
+logLevel: info
+redis:
+  url: redis://redis:6379
+env:
+  BFFX_ENV: production

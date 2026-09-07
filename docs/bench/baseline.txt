@@ -1,0 +1,33 @@
+# BFFX Storage Benchmark Baseline (v0.1.0-beta)
+Date: 2026-05-12
+
+## Generated Results
+This file contains the benchmark results obtained on the development machine.
+
+Run these benchmarks with:
+```bash
+go test ./pkg/storage/ -bench=. -benchmem
+```
+
+### Storage Performance Baseline
+goos: darwin
+goarch: arm64
+pkg: bffx/pkg/storage
+cpu: Apple M1 Pro
+BenchmarkMemoryStore_Create-10    	 1320020	       904.4 ns/op	     844 B/op	      10 allocs/op
+BenchmarkSQLiteStore_Create-10    	  140373	      8393 ns/op	    1209 B/op	      33 allocs/op
+PASS
+ok  	bffx/pkg/storage	4.076s
+
+## Interpretation
+- MemoryStore: High-performance in-memory storage for testing (~900ns per create)
+- SQLiteStore: Production-ready SQLite storage (~8400ns per create, includes disk I/O)
+- Both implementations follow the same interface contract with context support
+
+## Key Metrics
+- **Latency**: SQLite create operations average ~8.4μs
+- **Allocations**: 33 allocations per SQLite operation vs 10 for memory
+- **Throughput**: Memory store achieves ~1.1M ops/sec vs SQLite ~140K ops/sec
+
+## Regression Detection
+Compare future runs against these baselines to detect performance regressions.

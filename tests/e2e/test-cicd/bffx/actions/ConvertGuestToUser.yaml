@@ -1,0 +1,10 @@
+apiVersion: bffx.io/v1alpha1
+kind: Action
+metadata:
+  name: ConvertGuestToUser
+spec:
+  group: mobile
+  route:
+    method: POST
+    path: /api/v1/onboarding/convert-guest
+    auth: optional

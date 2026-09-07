@@ -1,0 +1,13 @@
+apiVersion: bffx.io/v1alpha1
+kind: Blueprint
+metadata:
+  name: DefaultAppStrings
+spec:
+  resource: AppString
+  count: 3
+  defaults:
+    locale: en
+  items:
+    - { key: "login_btn", value: "Login to Your Account" }
+    - { key: "home_tab", value: "Home" }
+    - { key: "settings_tab", value: "Settings" }

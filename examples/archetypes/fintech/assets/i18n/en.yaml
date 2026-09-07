@@ -1,0 +1,7 @@
+welcome_message: "Welcome to fintech!"
+error_unauthorized: "You must be logged in to access this."
+error_not_found: "The requested resource was not found."
+login_btn: "Log In"
+signup_btn: "Sign Up"
+home_tab: "Dashboard"
+settings_tab: "Settings"

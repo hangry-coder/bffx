@@ -1,0 +1,16 @@
+apiVersion: bffx.io/v1alpha1
+kind: Resource
+metadata:
+  name: Device
+spec:
+  group: mobile
+  fields:
+    - { name: platform, type: string }
+    - { name: is_onboarded, type: bool }
+    - { name: is_guest, type: bool }
+  routes:
+    crud: true
+  policy:
+    read: public
+    write: public
+  hooks: {}

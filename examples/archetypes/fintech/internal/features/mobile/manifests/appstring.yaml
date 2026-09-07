@@ -1,0 +1,16 @@
+apiVersion: bffx.io/v1alpha1
+kind: Resource
+metadata:
+  name: AppString
+spec:
+  group: mobile
+  fields:
+    - { name: key, type: string }
+    - { name: locale, type: string }
+    - { name: value, type: string }
+  routes:
+    crud: true
+  policy:
+    read: public
+    write: public
+  hooks: {}

@@ -1,0 +1,11 @@
+apiVersion: bffx.io/v1alpha1
+kind: Blueprint
+metadata:
+  name: SubscriptionDefault
+spec:
+  resource: Subscription
+  fields:
+    user_id: "libero"
+    plan_id: "Free Tier"
+    status: "pending"
+    expires_at: "libero"

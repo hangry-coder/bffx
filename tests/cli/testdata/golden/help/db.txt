@@ -1,0 +1,2 @@
+Usage: bffx db [backup]
+  backup  SQLite online snapshot via VACUUM INTO (--path|-o FILE)

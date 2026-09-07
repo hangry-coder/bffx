@@ -1,0 +1,17 @@
+apiVersion: bffx.io/v1alpha1
+kind: Resource
+metadata:
+  name: FeatureFlag
+spec:
+  group: system
+  fields:
+    - { name: key, type: string }
+    - { name: enabled, type: bool }
+    - { name: rules, type: string }
+    - { name: description, type: string }
+  routes:
+    crud: true
+  policy:
+    read: owner
+    write: owner
+  hooks: {}

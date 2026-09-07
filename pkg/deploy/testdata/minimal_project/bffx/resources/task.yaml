@@ -1,0 +1,12 @@
+apiVersion: bffx.io/v1alpha1
+kind: Resource
+metadata:
+  name: Task
+spec:
+  fields:
+    - { name: title, type: string, required: true }
+  routes:
+    crud: true
+  policy:
+    read: owner
+    write: owner

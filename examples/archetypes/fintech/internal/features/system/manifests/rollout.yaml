@@ -1,0 +1,16 @@
+apiVersion: bffx.io/v1alpha1
+kind: Resource
+metadata:
+  name: Rollout
+spec:
+  group: system
+  fields:
+    - { name: flag_id, type: string }
+    - { name: percentage, type: int }
+    - { name: release_id, type: string }
+  routes:
+    crud: true
+  policy:
+    read: owner
+    write: owner
+  hooks: {}
