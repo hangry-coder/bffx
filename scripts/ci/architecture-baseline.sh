@@ -4,10 +4,10 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 cd "$ROOT"
 
+export GOWORK=off
 mkdir -p "${ROOT}/.bffx/bin"
 GOBIN="${ROOT}/.bffx/bin" go install ./cmd/bffx
 export PATH="${ROOT}/.bffx/bin:$PATH"
-export GOWORK=off
 
 REPORT_DIR="${ROOT}/.bffx"
 REPORT_FILE="${REPORT_DIR}/architecture-baseline.md"
@@ -59,6 +59,8 @@ benchmark_project() {
   sync_ms="$((e1 - s1))"
 
   core_bytes="$(core_size_bytes ".")"
+
+  go mod tidy
 
   s2="$(ms_now)"
   go build -o .bffx/orchestrator.baseline "$cmd_path"
