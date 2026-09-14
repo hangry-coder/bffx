@@ -253,6 +253,12 @@ fields:
 `},
 		{"AppConfig", `
 fields:
+  - name: key
+    type: string
+  - name: value
+    type: string
+  - name: type
+    type: string
   - name: config_key
     type: string
   - name: config_value
@@ -718,6 +724,9 @@ func getInternalDefaultFields(name string) []*yaml.Node {
 		}
 	case "AppConfig":
 		return []*yaml.Node{
+			createFieldNode("key", "string", false),
+			createFieldNode("value", "string", false),
+			createFieldNode("type", "string", false),
 			createFieldNode("config_key", "string", false),
 			createFieldNode("config_value", "string", false),
 			createFieldNode("description", "string", false),

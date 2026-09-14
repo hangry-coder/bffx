@@ -163,6 +163,18 @@
       "enabled": true,
       "fields": [
         {
+          "name": "key",
+          "type": "string"
+        },
+        {
+          "name": "value",
+          "type": "string"
+        },
+        {
+          "name": "type",
+          "type": "string"
+        },
+        {
           "name": "config_key",
           "type": "string"
         },
@@ -184,6 +196,9 @@
         "per_page": 25,
         "selectable": true,
         "columns": [
+          "key",
+          "value",
+          "type",
           "config_key",
           "config_value",
           "description"
@@ -196,24 +211,27 @@
         ],
         "filters": [
           {
-            "field": "config_key",
+            "field": "key",
             "as": "string",
-            "label": "Config_key"
+            "label": "Key"
           },
           {
-            "field": "config_value",
+            "field": "value",
             "as": "string",
-            "label": "Config_value"
+            "label": "Value"
           },
           {
-            "field": "description",
+            "field": "type",
             "as": "string",
-            "label": "Description"
+            "label": "Type"
           }
         ]
       },
       "show": {
         "attributes": [
+          "key",
+          "value",
+          "type",
           "config_key",
           "config_value",
           "description"
@@ -221,6 +239,18 @@
       },
       "form": {
         "inputs": [
+          {
+            "field": "key",
+            "as": "string"
+          },
+          {
+            "field": "value",
+            "as": "string"
+          },
+          {
+            "field": "type",
+            "as": "string"
+          },
           {
             "field": "config_key",
             "as": "string"

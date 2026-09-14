@@ -53,7 +53,7 @@ func SeedRegistry(reg *manifest.Registry, store Store, opts ...SeedOptions) erro
 					payload[k] = v
 				}
 			}
-			if err := normalizeSeedPayload(payload); err != nil {
+			if err := normalizeSeedPayload(spec.Resource, payload); err != nil {
 				return fmt.Errorf("blueprint %s: %w", bp.Metadata.Name, err)
 			}
 			if skip, err := seedRecordExists(ctx, store, spec.Resource, payload); err != nil {
@@ -79,7 +79,7 @@ func SeedRegistry(reg *manifest.Registry, store Store, opts ...SeedOptions) erro
 		upsert := opt.Upsert || spec.Upsert
 
 		for i, row := range spec.Rows {
-			if err := normalizeSeedPayload(row); err != nil {
+			if err := normalizeSeedPayload(spec.Table, row); err != nil {
 				return fmt.Errorf("seed %s row %d: %w", seed.Metadata.Name, i, err)
 			}
 			existingID, found, err := findSeedRow(ctx, store, spec.Table, row)
@@ -107,7 +107,7 @@ func SeedRegistry(reg *manifest.Registry, store Store, opts ...SeedOptions) erro
 	return nil
 }
 
-func normalizeSeedPayload(payload map[string]any) error {
+func normalizeSeedPayload(resource string, payload map[string]any) error {
 	if raw, ok := payload["password"].(string); ok && raw != "" && !strings.HasPrefix(raw, "$2") {
 		hash, err := auth.HashPassword(raw)
 		if err != nil {
@@ -115,26 +115,56 @@ func normalizeSeedPayload(payload map[string]any) error {
 		}
 		payload["password"] = hash
 	}
+	// Harmonize AppConfig key/value vs config_key/config_value schema variants ONLY for AppConfig
+	if strings.EqualFold(resource, "AppConfig") || strings.EqualFold(resource, "bffx_app_config") {
+		if k, ok := payload["key"]; ok && k != nil && payload["config_key"] == nil {
+			payload["config_key"] = k
+		} else if ck, ok := payload["config_key"]; ok && ck != nil && payload["key"] == nil {
+			payload["key"] = ck
+		}
+		if v, ok := payload["value"]; ok && v != nil && payload["config_value"] == nil {
+			payload["config_value"] = v
+		} else if cv, ok := payload["config_value"]; ok && cv != nil && payload["value"] == nil {
+			payload["value"] = cv
+		}
+	}
 	return nil
 }
 
 func seedRecordExists(ctx context.Context, store Store, resource string, payload map[string]any) (bool, error) {
-	email, _ := payload["email"].(string)
-	if email == "" {
-		return false, nil
+	if email, _ := payload["email"].(string); email != "" {
+		_, err := store.GetByField(ctx, resource, "email", email)
+		if err == nil {
+			return true, nil
+		}
+		if err == bffxerrors.ErrNotFound {
+			return false, nil
+		}
+		return false, err
 	}
-	_, err := store.GetByField(ctx, resource, "email", email)
-	if err == nil {
-		return true, nil
+	if strings.EqualFold(resource, "AppConfig") || strings.EqualFold(resource, "bffx_app_config") {
+		if k, _ := payload["key"].(string); k != "" {
+			rec, err := store.GetByField(ctx, resource, "key", k)
+			if err == nil && rec != nil {
+				return true, nil
+			}
+		}
+		if ck, _ := payload["config_key"].(string); ck != "" {
+			rec, err := store.GetByField(ctx, resource, "config_key", ck)
+			if err == nil && rec != nil {
+				return true, nil
+			}
+		}
 	}
-	if err == bffxerrors.ErrNotFound {
-		return false, nil
-	}
-	return false, err
+	return false, nil
 }
 
 func findSeedRow(ctx context.Context, store Store, table string, row map[string]any) (id string, found bool, err error) {
-	for _, field := range []string{"code", "id", "email", "name"} {
+	fields := []string{"code", "id", "email", "name"}
+	if strings.EqualFold(table, "AppConfig") || strings.EqualFold(table, "bffx_app_config") {
+		fields = append(fields, "key", "config_key")
+	}
+	for _, field := range fields {
 		val, ok := row[field]
 		if !ok {
 			continue

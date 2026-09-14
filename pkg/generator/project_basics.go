@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/hangry-coder/bffx/pkg/logger"
+	"github.com/hangry-coder/bffx/pkg/version"
 )
 
 func generateBasics(projectDir, name string, opts ProjectOptions) error {
@@ -83,8 +84,8 @@ func generateBasics(projectDir, name string, opts ProjectOptions) error {
 		"package hooks",
 		"",
 		"import (",
-		"	\"github.com/hangry-coder/bffx/pkg/api/errors\"",
-		"	\"github.com/hangry-coder/bffx/pkg/api/handlers\"",
+		fmt.Sprintf("\t\"%s/pkg/api/errors\"", version.FrameworkModulePath()),
+		fmt.Sprintf("\t\"%s/pkg/api/handlers\"", version.FrameworkModulePath()),
 		"	\"encoding/json\"",
 		"	\"net/http\"",
 		")",
@@ -188,7 +189,7 @@ func GenerateOrchestratorMain(projectDir string, dryRun bool) error {
 		"package main",
 		"",
 		"import (",
-		"	\"github.com/hangry-coder/bffx/pkg/app\"",
+		fmt.Sprintf("\t\"%s/pkg/app\"", version.FrameworkModulePath()),
 		"	\"context\"",
 		"	\"fmt\"",
 		"	\"log\"",

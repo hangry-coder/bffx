@@ -777,6 +777,12 @@ func buildStartupHUD(port int, spec *manifest.ProjectSpec, reg *manifest.Registr
 		jwtStatus = "env var (BFFX_JWT_...)"
 	}
 	out += fmt.Sprintf("│  JWT      : %-23s │\n", jwtStatus)
+
+	appSecretStatus := "disabled"
+	if os.Getenv("BFFX_APP_SECRET") != "" {
+		appSecretStatus = "X-App-Secret required"
+	}
+	out += fmt.Sprintf("│  AppSecret: %-23s │\n", appSecretStatus)
 	out += "├─────────────────────────────────────┤\n"
 	out += fmt.Sprintf("│  Resources: %-23d │\n", len(reg.Resources))
 	out += fmt.Sprintf("│  Actions  : %-23d │\n", len(reg.Actions))
