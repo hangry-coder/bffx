@@ -25,7 +25,18 @@ func HandleGenerate(args []string) {
 	if len(args) > 1 {
 		name = args[1]
 	}
-	if kind != "openapi" && kind != "cicd" && name == "" {
+	if kind == "client" {
+		for _, a := range args[1:] {
+			if a == "--help" || a == "-h" || a == "help" {
+				printClientHelp()
+				return
+			}
+		}
+		if name == "" {
+			printClientHelp()
+			return
+		}
+	} else if kind != "openapi" && kind != "cicd" && name == "" {
 		Usage()
 		return
 	}
@@ -183,15 +194,22 @@ func HandleGenerate(args []string) {
 		if len(actArgs) > 1 {
 			platform = actArgs[1]
 		}
-		if platform == "flutter" {
+		if platform == "--help" || platform == "-h" || platform == "help" {
+			printClientHelp()
+			return
+		}
+		pLower := strings.ToLower(platform)
+		if pLower == "flutter" || pLower == "dart" {
 			err = mobile.GenerateFlutterClient(root, reg, outputDir)
-		} else if platform == "kotlin" {
+		} else if pLower == "kotlin" || pLower == "android" {
 			err = mobile.GenerateKotlinClient(root, reg)
-		} else if platform == "csharp" {
+		} else if pLower == "csharp" || pLower == "dotnet" {
 			err = mobile.GenerateCSharpClient(root, reg)
-		} else if platform == "react-native" || platform == "typescript" {
+		} else if pLower == "react-native" || pLower == "typescript" || pLower == "ts" || pLower == "js" {
 			err = mobile.GenerateTypeScriptClient(root, reg)
-		} else if platform == "openapi" {
+		} else if pLower == "swift" || pLower == "ios" {
+			err = generator.GenerateClientIOS(root, "ios")
+		} else if pLower == "openapi" {
 			targetFile := filepath.Join(root, ".bffx", "openapi.json")
 			if outputDir != "" {
 				targetFile = outputDir
@@ -207,7 +225,7 @@ func HandleGenerate(args []string) {
 			fmt.Printf("Generated OpenAPI 3.1.0 specification at %s\n", targetFile)
 			return
 		} else {
-			err = fmt.Errorf("unsupported client platform: %s", platform)
+			err = fmt.Errorf("unsupported client platform: %s (supported: flutter, dart, typescript, react-native, kotlin, csharp, swift, openapi)", platform)
 		}
 	case "cicd":
 		err = generator.GenerateCICD(root)
@@ -224,3 +242,23 @@ func HandleGenerate(args []string) {
 		log.Fatalf("sync failed: %v", err)
 	}
 }
+
+func printClientHelp() {
+	fmt.Println("Usage:")
+	fmt.Println("  bffx generate client [platform] [options]")
+	fmt.Println("")
+	fmt.Println("Supported client platforms:")
+	fmt.Println("  flutter (or dart)    - Flutter / Dart client SDK")
+	fmt.Println("  typescript (or ts)   - TypeScript client SDK")
+	fmt.Println("  react-native         - React Native client SDK")
+	fmt.Println("  kotlin (or android)  - Kotlin (Android) client SDK")
+	fmt.Println("  csharp (or dotnet)   - C# / .NET client SDK")
+	fmt.Println("  swift (or ios)       - Swift / iOS client SDK")
+	fmt.Println("  openapi              - OpenAPI 3.1.0 specification (.bffx/openapi.json)")
+	fmt.Println("")
+	fmt.Println("Options:")
+	fmt.Println("  --out <dir|file>     - Custom output directory or file path")
+	fmt.Println("  --root <dir>         - BFFX project root (default: \".\")")
+	fmt.Println("  --help, -h           - Show this help message")
+}
+

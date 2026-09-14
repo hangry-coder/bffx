@@ -378,7 +378,7 @@ func TestMiddleware(t *testing.T) {
 		})).ServeHTTP(rr, req)
 		assert.Equal(t, http.StatusOK, rr.Code)
 
-		// 2. Invalid
+		// 2. Invalid in dev
 		req = httptest.NewRequest("GET", "/api/v1/test", nil)
 		req.Header.Set("X-App-Secret", "wrong")
 		rr = httptest.NewRecorder()
@@ -386,6 +386,27 @@ func TestMiddleware(t *testing.T) {
 			t.Error("Next handler should not be called")
 		})).ServeHTTP(rr, req)
 		assert.Equal(t, http.StatusForbidden, rr.Code)
+		assert.Contains(t, rr.Body.String(), "invalid app secret (header 'X-App-Secret' does not match BFFX_APP_SECRET)")
+
+		// 3. Missing in dev
+		req = httptest.NewRequest("GET", "/api/v1/test", nil)
+		rr = httptest.NewRecorder()
+		mw(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			t.Error("Next handler should not be called")
+		})).ServeHTTP(rr, req)
+		assert.Equal(t, http.StatusForbidden, rr.Code)
+		assert.Contains(t, rr.Body.String(), "missing app secret (provide via 'X-App-Secret' header matching BFFX_APP_SECRET)")
+
+		// 4. In production
+		t.Setenv("ENV", "production")
+		req = httptest.NewRequest("GET", "/api/v1/test", nil)
+		rr = httptest.NewRecorder()
+		mw(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			t.Error("Next handler should not be called")
+		})).ServeHTTP(rr, req)
+		assert.Equal(t, http.StatusForbidden, rr.Code)
+		assert.Contains(t, rr.Body.String(), "invalid app secret")
+		assert.NotContains(t, rr.Body.String(), "header 'X-App-Secret'")
 	})
 
 	t.Run("Timeout", func(t *testing.T) {

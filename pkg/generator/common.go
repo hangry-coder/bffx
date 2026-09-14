@@ -6,6 +6,8 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/hangry-coder/bffx/pkg/version"
 	"gopkg.in/yaml.v3"
 )
 
@@ -177,7 +179,7 @@ func GenerateAction(root, name, group string, layout LayoutType) error {
 
 	// Create Go hook stub
 	os.MkdirAll(paths.Hooks, 0o755)
-	goStub := fmt.Sprintf("package hooks\n\nimport (\n\t\"github.com/hangry-coder/bffx/pkg/api/handlers\"\n\t\"net/http\"\n)\n\nfunc Handle%s(ctx *handlers.ActionContext, w http.ResponseWriter, r *http.Request) {\n    // Implement custom action logic here\n}\n", name)
+	goStub := fmt.Sprintf("package hooks\n\nimport (\n\t\"%s/pkg/api/handlers\"\n\t\"net/http\"\n)\n\nfunc Handle%s(ctx *handlers.ActionContext, w http.ResponseWriter, r *http.Request) {\n    // Implement custom action logic here\n}\n", version.FrameworkModulePath(), name)
 	os.WriteFile(filepath.Join(paths.Hooks, strings.ToLower(name)+".go"), []byte(goStub), 0o644)
 
 	if err := EnsureAdminManifestForAction(root, name, layout); err != nil {
@@ -297,7 +299,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/hangry-coder/bffx/pkg/addons/catalog/nutrition"
+	"%s/pkg/addons/catalog/nutrition"
 )
 
 // NutritionCatalogAdapter implements the orchestrator.Catalog interface using openfoodfacts.
@@ -321,7 +323,7 @@ func (a *NutritionCatalogAdapter) Resolve(ctx context.Context, query string, hin
 func (a *NutritionCatalogAdapter) Source() string {
 	return "openfoodfacts"
 }
-`, strings.ToLower(name))
+`, strings.ToLower(name), version.FrameworkModulePath())
 	} else {
 		adaptersGo = fmt.Sprintf(`package %s
 
@@ -371,7 +373,7 @@ func (a *GenericCatalogAdapter) Source() string {
 import (
 	"fmt"
 
-	"github.com/hangry-coder/bffx/pkg/api/handlers"
+	"%s/pkg/api/handlers"
 )
 
 // Before%s executes custom preprocessing rules before the %s pipeline triggers.
@@ -387,7 +389,7 @@ func After%s(ctx *handlers.ActionContext, payload map[string]any) error {
 	fmt.Printf("afterPipeline executed for %s\n")
 	return nil
 }
-`, name, name, name, name, name, name, name, name)
+`, version.FrameworkModulePath(), name, name, name, name, name, name, name, name)
 
 	hookPath := filepath.Join(paths.Hooks, strings.ToLower(name)+".go")
 	if _, err := os.Stat(hookPath); os.IsNotExist(err) {

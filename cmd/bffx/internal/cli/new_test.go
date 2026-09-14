@@ -175,3 +175,89 @@ env:
 		t.Errorf("expected .gitignore to ignore .env, got: %s", string(gitIgnoreData))
 	}
 }
+
+func TestCLINewHelp(t *testing.T) {
+	oldStdout := os.Stdout
+	r, w, err := os.Pipe()
+	if err != nil {
+		t.Fatalf("failed to create pipe: %v", err)
+	}
+	os.Stdout = w
+
+	HandleNew([]string{"--help"})
+
+	w.Close()
+	os.Stdout = oldStdout
+
+	var buf bytes.Buffer
+	_, _ = io.Copy(&buf, r)
+	output := buf.String()
+
+	if !strings.Contains(output, "Usage:") || !strings.Contains(output, "--non-interactive") || !strings.Contains(output, "--no-admin") {
+		t.Errorf("expected new help output, got: %s", output)
+	}
+}
+
+func TestCLINewNonInteractiveNoAdmin(t *testing.T) {
+	tmpDir := t.TempDir()
+
+	HandleNew([]string{
+		"headless-noadmin",
+		"--root", tmpDir,
+		"--no-admin",
+		"--minimal",
+	})
+
+	projectDir := filepath.Join(tmpDir, "headless-noadmin")
+	manifestPath := filepath.Join(projectDir, "bffx", "project.yaml")
+	if _, err := os.Stat(manifestPath); os.IsNotExist(err) {
+		t.Fatalf("expected project.yaml to exist at %s", manifestPath)
+	}
+}
+
+func TestCLINewNonInteractiveAdminFlags(t *testing.T) {
+	tmpDir := t.TempDir()
+
+	HandleNew([]string{
+		"headless-admin",
+		"--root", tmpDir,
+		"--non-interactive",
+		"--admin-email=ci-admin@example.com",
+		"--admin-password=ci-admin-secret-password-1234",
+		"--minimal",
+	})
+
+	projectDir := filepath.Join(tmpDir, "headless-admin")
+	manifestPath := filepath.Join(projectDir, "bffx", "project.yaml")
+	if _, err := os.Stat(manifestPath); os.IsNotExist(err) {
+		t.Fatalf("expected project.yaml to exist at %s", manifestPath)
+	}
+}
+
+func TestCLIGenerateClientHelp(t *testing.T) {
+	oldStdout := os.Stdout
+	r, w, err := os.Pipe()
+	if err != nil {
+		t.Fatalf("failed to create pipe: %v", err)
+	}
+	os.Stdout = w
+
+	HandleGenerate([]string{"client", "--help"})
+
+	w.Close()
+	os.Stdout = oldStdout
+
+	var buf bytes.Buffer
+	_, _ = io.Copy(&buf, r)
+	output := buf.String()
+
+	if !strings.Contains(output, "Supported client platforms:") {
+		t.Fatalf("expected client help header, got: %s", output)
+	}
+	for _, expected := range []string{"flutter", "typescript", "react-native", "kotlin", "csharp", "swift", "openapi"} {
+		if !strings.Contains(output, expected) {
+			t.Errorf("expected client help to mention %q, got: %s", expected, output)
+		}
+	}
+}
+

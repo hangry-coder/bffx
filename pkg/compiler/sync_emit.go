@@ -9,6 +9,7 @@ import (
 
 	"github.com/hangry-coder/bffx/pkg/generator"
 	"github.com/hangry-coder/bffx/pkg/manifest"
+	"github.com/hangry-coder/bffx/pkg/version"
 )
 
 func emitGoArtifacts(root string, actions []string, reg *manifest.Registry) error {
@@ -152,9 +153,10 @@ func emitGoArtifacts(root string, actions []string, reg *manifest.Registry) erro
 
 	warnUnresolvedManifestHooks(registeredHookKeys, collectManifestHookActions(reg))
 
+	fwMod := version.FrameworkModulePath()
 	importSection := []string{
-		"\t\"github.com/hangry-coder/bffx/pkg/api/handlers\"",
-		"\t\"github.com/hangry-coder/bffx/pkg/api/router\"",
+		fmt.Sprintf("\t\"%s/pkg/api/handlers\"", fwMod),
+		fmt.Sprintf("\t\"%s/pkg/api/router\"", fwMod),
 	}
 	if isV2 {
 		var sortedFeatures []string
@@ -187,7 +189,7 @@ func emitGoArtifacts(root string, actions []string, reg *manifest.Registry) erro
 			"\t\"google.golang.org/grpc/metadata\"",
 			"\t\"google.golang.org/grpc/status\"",
 			"\t\"google.golang.org/grpc/codes\"",
-			"\t\"github.com/hangry-coder/bffx/pkg/app\"",
+			fmt.Sprintf("\t\"%s/pkg/app\"", fwMod),
 			"\t\"context\"",
 			"\t\"encoding/json\"",
 		)

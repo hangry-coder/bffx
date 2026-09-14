@@ -6,6 +6,8 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/hangry-coder/bffx/pkg/version"
 )
 
 type ResourceOptions struct {
@@ -94,7 +96,7 @@ func GenerateResource(root, name string, fields []Field, opts ResourceOptions) e
 				"package hooks",
 				"",
 				"import (",
-				"	\"github.com/hangry-coder/bffx/pkg/api/handlers\"",
+				fmt.Sprintf("\t\"%s/pkg/api/handlers\"", version.FrameworkModulePath()),
 				")",
 				"",
 				"func BeforeCreate" + name + "(ctx *handlers.ActionContext, payload map[string]any) error {",
@@ -254,7 +256,7 @@ func GenerateResourceSpec(root, name string, fields []Field, opts ResourceOption
 		"package specs",
 		"",
 		"import (",
-		"	bffxtest \"github.com/hangry-coder/bffx/pkg/testing\"",
+		fmt.Sprintf("\tbffxtest \"%s/pkg/testing\"", version.FrameworkModulePath()),
 		"	\"testing\"",
 		")",
 		"",

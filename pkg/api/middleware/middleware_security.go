@@ -41,7 +41,16 @@ func AppSecret(apiPrefix string, secret string) func(http.Handler) http.Handler 
 			if strings.HasPrefix(r.URL.Path, apiPrefix) || strings.HasPrefix(r.URL.Path, "/auth") {
 				clientSecret := r.Header.Get("X-App-Secret")
 				if !SecretsEqual(clientSecret, secret) {
-					errors.WriteError(w, http.StatusForbidden, "invalid app secret")
+					isDev := os.Getenv("BFFX_ENV") != "production" && os.Getenv("ENV") != "production" && os.Getenv("APP_ENV") != "production"
+					if isDev {
+						if clientSecret == "" {
+							errors.WriteError(w, http.StatusForbidden, "missing app secret (provide via 'X-App-Secret' header matching BFFX_APP_SECRET)")
+						} else {
+							errors.WriteError(w, http.StatusForbidden, "invalid app secret (header 'X-App-Secret' does not match BFFX_APP_SECRET)")
+						}
+					} else {
+						errors.WriteError(w, http.StatusForbidden, "invalid app secret")
+					}
 					return
 				}
 			}

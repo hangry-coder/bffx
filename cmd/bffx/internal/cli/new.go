@@ -16,10 +16,15 @@ import (
 	"github.com/hangry-coder/bffx/pkg/generator/archetypes"
 	"github.com/hangry-coder/bffx/pkg/manifest"
 	"github.com/hangry-coder/bffx/pkg/storage"
+	"github.com/mattn/go-isatty"
 )
 
 func HandleNew(args []string) {
 	for _, arg := range args {
+		if arg == "-h" || arg == "--help" || arg == "help" {
+			printNewUsage()
+			return
+		}
 		if arg == "--list-archetypes" {
 			reg := archetypes.GetRegistry()
 			fmt.Println("🚀 Available BFFX Vertical Archetypes:")
@@ -47,6 +52,9 @@ func HandleNew(args []string) {
 	}
 
 	nonInteractive := false
+	if !isatty.IsTerminal(os.Stdin.Fd()) && !isatty.IsCygwinTerminal(os.Stdin.Fd()) {
+		nonInteractive = true
+	}
 	devVendor := false
 	parentDir := "."
 
@@ -119,6 +127,33 @@ func HandleNew(args []string) {
 			pipelineOverride = args[i+1]
 			nonInteractive = true
 			i++
+		} else if strings.HasPrefix(arg, "--root=") {
+			parentDir = strings.TrimPrefix(arg, "--root=")
+		} else if strings.HasPrefix(arg, "--parent-dir=") {
+			parentDir = strings.TrimPrefix(arg, "--parent-dir=")
+		} else if strings.HasPrefix(arg, "--store=") {
+			mode := strings.TrimPrefix(arg, "--store=")
+			opts.StoreMode = mode
+			if opts.Batteries == nil {
+				opts.Batteries = &generator.UserBatteryOverrides{}
+			}
+			opts.Batteries.Store = mode
+		} else if strings.HasPrefix(arg, "--admin-email=") {
+			opts.AdminEmail = strings.TrimPrefix(arg, "--admin-email=")
+			opts.AdminEnabled = true
+			nonInteractive = true
+		} else if strings.HasPrefix(arg, "--admin-password=") {
+			opts.AdminPassword = strings.TrimPrefix(arg, "--admin-password=")
+			opts.AdminEnabled = true
+			nonInteractive = true
+		} else if strings.HasPrefix(arg, "--admin=") {
+			v := strings.ToLower(strings.TrimPrefix(arg, "--admin="))
+			opts.AdminEnabled = v != "false" && v != "0" && v != "no"
+			nonInteractive = true
+		} else if strings.HasPrefix(arg, "--auth-strategy=") {
+			opts.AuthStrategy = strings.TrimPrefix(arg, "--auth-strategy=")
+		} else if strings.HasPrefix(arg, "--layout=") {
+			opts.Layout = generator.LayoutType(strings.TrimPrefix(arg, "--layout="))
 		} else {
 			switch arg {
 			case "--root", "--parent-dir":
@@ -137,17 +172,29 @@ func HandleNew(args []string) {
 				}
 			case "--no-admin":
 				opts.AdminEnabled = false
-			case "--non-interactive":
+				nonInteractive = true
+			case "--admin":
+				if i+1 < len(args) && (args[i+1] == "true" || args[i+1] == "false") {
+					opts.AdminEnabled = args[i+1] == "true"
+					i++
+				} else {
+					opts.AdminEnabled = true
+				}
+				nonInteractive = true
+			case "--non-interactive", "-y", "--yes", "--ci":
 				nonInteractive = true
 			case "--admin-email":
 				if i+1 < len(args) {
 					opts.AdminEmail = args[i+1]
 					opts.AdminEnabled = true
+					nonInteractive = true
 					i++
 				}
 			case "--admin-password":
 				if i+1 < len(args) {
 					opts.AdminPassword = args[i+1]
+					opts.AdminEnabled = true
+					nonInteractive = true
 					i++
 				}
 			case "--with-telemetry":
@@ -262,9 +309,14 @@ func HandleNew(args []string) {
 	}
 
 	var generatedPassword string
-	if opts.AdminEnabled && opts.AdminPassword == "" {
-		generatedPassword = generateRandomPassword()
-		opts.AdminPassword = generatedPassword
+	if opts.AdminEnabled {
+		if opts.AdminEmail == "" {
+			opts.AdminEmail = "admin@example.com"
+		}
+		if opts.AdminPassword == "" {
+			generatedPassword = generateRandomPassword()
+			opts.AdminPassword = generatedPassword
+		}
 	}
 
 	if archetypeAlias != "" {
@@ -357,4 +409,28 @@ func generateRandomPassword() string {
 	b := make([]byte, 12)
 	_, _ = rand.Read(b)
 	return hex.EncodeToString(b)
+}
+
+func printNewUsage() {
+	fmt.Println("Usage:")
+	fmt.Println("  bffx new <name> [flags]")
+	fmt.Println("")
+	fmt.Println("Flags:")
+	fmt.Println("  --non-interactive, -y, --yes   Skip interactive wizard and use defaults/flags")
+	fmt.Println("  --no-admin                     Disable the built-in admin panel")
+	fmt.Println("  --admin=false|true             Enable or disable the built-in admin panel")
+	fmt.Println("  --admin-email <email>          Admin user email (default: admin@example.com)")
+	fmt.Println("  --admin-password <password>    Admin user password (auto-generated if omitted)")
+	fmt.Println("  --archetype <alias>            Scaffold from a vertical archetype (--list-archetypes)")
+	fmt.Println("  --pipeline <type>              Override post-hook pipeline type (e.g. rag, calorie)")
+	fmt.Println("  --store <sqlite|postgres|mem>  Primary datastore engine (default: sqlite)")
+	fmt.Println("  --layout <v1|v2>               Project directory layout (default: v2)")
+	fmt.Println("  --auth-strategy <strategy>     Auth strategy: optional, mandatory, or anonymous")
+	fmt.Println("  --with-telemetry               Include telemetry & metrics addon")
+	fmt.Println("  --with-monetization            Include subscriptions & entitlements addon")
+	fmt.Println("  --with-flags                   Include feature flags & rollouts addon")
+	fmt.Println("  --with-ads                     Include ads ecosystem addon")
+	fmt.Println("  --minimal                      Generate a bare minimum project scaffold")
+	fmt.Println("  --root, --parent-dir <dir>     Parent directory to create the project in (default: \".\")")
+	fmt.Println("  --help, -h                     Show this help message")
 }

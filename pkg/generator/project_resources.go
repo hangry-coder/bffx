@@ -191,7 +191,7 @@ func generateCoreResources(projectDir, name string, opts ProjectOptions) error {
 	}
 
 	// Add AppConfig for Mobile Meta Info (Icons, Colors, etc.)
-	appConfigFields, _ := ParseFields([]string{"key:string", "value:string", "type:string", "description:string"})
+	appConfigFields, _ := ParseFields([]string{"key:string", "value:string", "type:string", "description:string", "config_key:string", "config_value:string"})
 	if err := GenerateResource(projectDir, "AppConfig", appConfigFields, ResourceOptions{Layout: opts.Layout, Group: "mobile", ReadPolicy: "public", WritePolicy: "admin"}); err != nil {
 		return fmt.Errorf("generate AppConfig resource: %w", err)
 	}

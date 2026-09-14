@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/hangry-coder/bffx/pkg/manifest"
+	"github.com/hangry-coder/bffx/pkg/version"
 )
 
 var safeIdent = regexp.MustCompile(`^[A-Za-z][A-Za-z0-9_]*$`)
@@ -60,7 +61,7 @@ func renderTypedResource(goName string, spec *manifest.ResourceSpec) (string, er
 		}
 	}
 	if hasLocalized {
-		fmt.Fprintf(&b, "import \"github.com/hangry-coder/bffx/pkg/i18n\"\n\n")
+		fmt.Fprintf(&b, "import \"%s/pkg/i18n\"\n\n", version.FrameworkModulePath())
 	}
 
 	fmt.Fprintf(&b, "// %s is a typed view of manifest resource %q.\n", goName, goName)
